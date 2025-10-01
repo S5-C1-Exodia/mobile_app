@@ -3,8 +3,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_app/providers/app_provider.dart';
 import 'package:mobile_app/L10n/app_localizations.dart';
-import 'Screens/playlist_selection_screen.dart';
-import 'core/theme/app_theme.dart';
+import 'Screens/playlist_screen.dart';
+import 'core/theme/palettes.dart';
 
 
 void main() {
@@ -17,30 +17,40 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppProvider>(
-      builder: (context, appProvider, child) {
-        return MaterialApp(
-          title: 'SwipeZ',
-          theme: AppTheme.lightTheme(),
-          darkTheme: AppTheme.darkTheme(),
-          themeMode: appProvider.themeMode,
-          locale: appProvider.locale,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-          supportedLocales: const [
-            Locale('fr'),
-            Locale('en'),
-          ],
-          home: PlaylistSelectionScreen(),
-        );
-      },
+    final appProvider = Provider.of<AppProvider>(context);
+    final isDark = appProvider.themeMode == ThemeMode.dark;
+    final AppPalette currentPalette = isDark ? paletteDark : paletteLight;
+
+    final ThemeData themeData = (isDark ? ThemeData.dark() : ThemeData.light()).copyWith(
+      scaffoldBackgroundColor: currentPalette.background,
+      appBarTheme: AppBarTheme(
+        backgroundColor: currentPalette.background,
+        elevation: 0,
+      ),
+    );
+
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      locale: appProvider.locale,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('fr'),
+        Locale('en'),
+      ],
+      theme: themeData,
+      home: PlaylistsScreen(
+        palette: currentPalette,
+        onToggleTheme: appProvider.toggleTheme,
+      ),
     );
   }
 }

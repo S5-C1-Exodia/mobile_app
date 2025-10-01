@@ -10,7 +10,7 @@ Future<List<Playlist>> fetchPlaylists() async {
       tracks: [
         Track(title: 'Song 1', artist: 'Artist A'),
         Track(title: 'Song 2', artist: 'Artist B'),
-      ],
+      ], autor: '',
     ),
     Playlist(
       name: 'Chill Vibes',
@@ -18,7 +18,7 @@ Future<List<Playlist>> fetchPlaylists() async {
       tracks: [
         Track(title: 'Song 3', artist: 'Artist C'),
         Track(title: 'Song 4', artist: 'Artist D'),
-      ],
+      ], autor: '',
     ),
   ];
 }

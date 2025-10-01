@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
     final VoidCallback onSwipeRight;
 
     const SwipeCard({
-      Key? key,
+      super.key,
       required this.imageUrl,
       required this.onSwipeLeft,
       required this.onSwipeRight,
-    }) : super(key: key);
+    });
 
     @override
     State<SwipeCard> createState() => _SwipeCardState();
@@ -19,16 +19,13 @@ import 'package:flutter/material.dart';
   class _SwipeCardState extends State<SwipeCard> {
     Offset _position = Offset.zero;
     double _rotation = 0;
-    bool _isDragging = false;
 
     @override
     Widget build(BuildContext context) {
       final screenWidth = MediaQuery.of(context).size.width;
       return GestureDetector(
         onPanStart: (details) {
-          setState(() {
-            _isDragging = true;
-          });
+          // Start drag
         },
         onPanUpdate: (details) {
           setState(() {
@@ -37,9 +34,6 @@ import 'package:flutter/material.dart';
           });
         },
         onPanEnd: (details) {
-          setState(() {
-            _isDragging = false;
-          });
           if (_position.dx.abs() > 100) {
             if (_position.dx > 0) {
               widget.onSwipeRight();
@@ -62,7 +56,8 @@ import 'package:flutter/material.dart';
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
+                    // Utiliser Color.fromRGBO à la place de withOpacity
+                    color: Color.fromRGBO(0, 0, 0, 0.5),
                     blurRadius: 20,
                     spreadRadius: 5,
                   ),

@@ -2,85 +2,91 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_app/providers/app_provider.dart';
 import '../L10n/app_localizations.dart';
+import '../core/theme/palettes.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String titleKey;
 
-  const CustomAppBar({required this.titleKey});
+  // Utiliser super.key pour le paramètre key
+  const CustomAppBar({super.key, required this.titleKey});
 
   @override
   Widget build(BuildContext context) {
-    final appLocalizations = AppLocalizations.of(context)!;
+    // fallback si les localizations ne sont pas encore disponibles
+    final appLocalizations = AppLocalizations.of(context) ?? AppLocalizations();
+    final appProvider = Provider.of<AppProvider>(context);
+
+    // Déterminer la palette courante comme dans main
+    final bool isDark = appProvider.themeMode == ThemeMode.dark;
+    final AppPalette currentPalette = isDark ? paletteDark : paletteLight;
+
+    // Couleur du titre dépendante de la palette
+    final Color titleColor = currentPalette.accentGreen;
 
     return AppBar(
-      backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-      title: Text(appLocalizations.appTitle),
-      iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),
+      backgroundColor: currentPalette.background,
       elevation: 0,
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () {
-            _showSettingsMenu(context);
-          },
+      centerTitle: false,
+      toolbarHeight: 120,
+      // Titre aligné à gauche, grosse taille (logo texte)
+      title: Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Text(
+          appLocalizations.appTitle,
+          style: TextStyle(
+            color: titleColor,
+            fontSize: 40,
+            fontFamily: 'ArchivoBlack',
+            fontWeight: FontWeight.bold,
+          ),
         ),
+      ),
+      iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),
+      actions: [
+        // Sélecteur de langue inline
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<Locale>(
+              value: appProvider.locale,
+              dropdownColor: currentPalette.background,
+              onChanged: (Locale? newLocale) {
+                if (newLocale != null) {
+                  appProvider.setLocale(newLocale);
+                }
+              },
+              items: [
+                DropdownMenuItem(
+                  value: const Locale('fr'),
+                  child: Text(appLocalizations.french, style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color)),
+                ),
+                DropdownMenuItem(
+                  value: const Locale('en'),
+                  child: Text(appLocalizations.english, style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color)),
+                ),
+              ],
+              iconEnabledColor: Theme.of(context).iconTheme.color,
+            ),
+          ),
+        ),
+
+        // Petit bouton thème (soleil / lune)
+        Padding(
+          padding: const EdgeInsets.only(right: 12.0),
+          child: IconButton(
+            icon: Icon(appProvider.themeMode == ThemeMode.dark ? Icons.nightlight_round : Icons.wb_sunny),
+            color: currentPalette.accentGreen,
+            onPressed: () {
+              appProvider.toggleTheme();
+            },
+            tooltip: appLocalizations.theme,
+          ),
+        ),
+
       ],
     );
   }
 
-  void _showSettingsMenu(BuildContext context) {
-    final appProvider = Provider.of<AppProvider>(context, listen: false);
-    final appLocalizations = AppLocalizations.of(context)!;
-
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(Icons.language),
-                title: Text(appLocalizations.language),
-                trailing: DropdownButton<Locale>(
-                  value: appProvider.locale,
-                  onChanged: (Locale? newLocale) {
-                    if (newLocale != null) {
-                      appProvider.setLocale(newLocale);
-                      Navigator.pop(context);
-                    }
-                  },
-                  items: const [
-                    DropdownMenuItem(
-                      value: Locale('fr'),
-                      child: Text('Français'),
-                    ),
-                    DropdownMenuItem(
-                      value: Locale('en'),
-                      child: Text('English'),
-                    ),
-                  ],
-                ),
-              ),
-              ListTile(
-                leading: const Icon(Icons.brightness_6),
-                title: Text(appLocalizations.theme),
-                trailing: Switch(
-                  value: appProvider.themeMode == ThemeMode.dark,
-                  onChanged: (bool value) {
-                    appProvider.setThemeMode(
-                      value ? ThemeMode.dark : ThemeMode.light,
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);

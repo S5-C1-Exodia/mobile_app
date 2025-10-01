@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import '../widgets/action_buttons.dart';
 import '../widgets/custom_bottom_bar.dart';
 import '../L10n/app_localizations.dart';
+import '../widgets/custom_app_bar.dart';
 
 class SwipeScreen extends StatefulWidget {
-  const SwipeScreen({Key? key}) : super(key: key);
+  const SwipeScreen({super.key});
 
   @override
   State<SwipeScreen> createState() => _SwipeScreenState();
@@ -24,14 +25,14 @@ class _SwipeScreenState extends State<SwipeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final appLocalizations = AppLocalizations.of(context)!;
+    final appLocalizations = AppLocalizations.of(context) ?? AppLocalizations();
 
     return Scaffold(
+      appBar: const CustomAppBar(titleKey: 'appTitle'),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           children: [
-            _buildTopBar(appLocalizations),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -122,71 +123,15 @@ class _SwipeScreenState extends State<SwipeScreen> {
     );
   }
 
-  Widget _buildTopBar(AppLocalizations appLocalizations) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            appLocalizations.appTitle,
-            style: TextStyle(
-              color: Theme.of(context).primaryColor,
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.menu,
-              color: Theme.of(context).iconTheme.color,
-              size: 28,
-            ),
-            onPressed: () {
-              _showSettingsPopup(context, appLocalizations);
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showSettingsPopup(
-    BuildContext context,
-    AppLocalizations appLocalizations,
-  ) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(appLocalizations.theme),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Ajoutez ici le switch/slider pour le thème et la langue
-              Text(appLocalizations.language),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(appLocalizations.close),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void _handleDislike() {
-    print('Dislike!');
+    debugPrint('Dislike!');
   }
 
   void _handleLike() {
-    print('Like!');
+    debugPrint('Like!');
   }
 
   void _handleFavorite() {
-    print('Favorite!');
+    debugPrint('Favorite!');
   }
 }

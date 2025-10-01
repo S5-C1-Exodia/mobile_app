@@ -6,11 +6,11 @@ class ActionButtons extends StatelessWidget {
   final VoidCallback onLike;
 
   const ActionButtons({
-    Key? key,
+    super.key,
     required this.onDislike,
     required this.onFavorite,
     required this.onLike,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +47,9 @@ class ActionButtons extends StatelessWidget {
     required double size,
     required VoidCallback onPressed,
   }) {
+    // Utiliser color.withAlpha pour définir l'opacité du bord
+    final borderColor = color.withAlpha((0.3 * 255).round());
+
     return Material(
       color: const Color(0xFF282828),
       borderRadius: BorderRadius.circular(size / 2),
@@ -59,7 +62,7 @@ class ActionButtons extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-              color: color.withOpacity(0.3),
+              color: borderColor,
               width: 2,
             ),
           ),
