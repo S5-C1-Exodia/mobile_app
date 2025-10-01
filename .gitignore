@@ -43,3 +43,48 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+# VS Code (décommenter si besoin)
+#.vscode/
+
+# Flutter/Dart/Pub related
+.flutter-plugins
+.packages
+
+# Android Studio / Gradle related
+.gradle/
+local.properties
+**/captures/
+**/.gradle/
+**/gradle-app.setting
+**/gradlew
+**/gradlew.bat
+**/gradle-wrapper.jar
+**/gradle-wrapper.properties
+
+# iOS / Xcode related
+**/ios/Pods/
+**/ios/.symlinks/
+/ios/Flutter/Flutter.framework
+/ios/Flutter/Flutter.podspec
+/ios/ServiceDefinitions.json
+/ios/Runner/GeneratedPluginRegistrant.*
+
+# macOS related
+/macos/Flutter/GeneratedPluginRegistrant.swift
+
+# Web related (si Flutter Web activé)
+lib/generated_plugin_registrant.dart
+
+# Windows related
+/windows/flutter/generated_plugin_registrant.cc
+/windows/flutter/generated_plugin_registrant.h
+/windows/flutter/generated_plugin_registrant.*
+
+# Linux related
+/linux/flutter/generated_plugin_registrant.cc
+/linux/flutter/generated_plugin_registrant.h
+/linux/flutter/generated_plugin_registrant.*
+
+# Firebase/Google Services (à gérer via .env ou secrets)
+google-services.json
+GoogleService-Info.plist
