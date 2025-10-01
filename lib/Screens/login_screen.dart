@@ -1,19 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/L10n/app_localizations.dart';
 import '../core/theme/palettes.dart';
 import 'playlist_screen.dart';
 
 class LoginScreen extends StatelessWidget {
+  final AppPalette palette;
+  final VoidCallback onToggleTheme;
+
+  const LoginScreen({
+    Key? key,
+    required this.palette,
+    required this.onToggleTheme,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    final appLocalizations = AppLocalizations.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: Text('Connexion')),
+      appBar: AppBar(title: Text(appLocalizations?.login ?? 'Connexion')),
       body: Center(
         child: GestureDetector(
           onTap: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => PlaylistsScreen(palette: paletteDark, onToggleTheme: () {})
-            ));
+              MaterialPageRoute(
+                builder: (context) => PlaylistsScreen(
+                  palette: palette,
+                  onToggleTheme: onToggleTheme,
+                ),
+              ),
+            );
           },
           child: Container(
             width: 120,
@@ -21,8 +38,8 @@ class LoginScreen extends StatelessWidget {
             color: Colors.green,
             alignment: Alignment.center,
             child: Text(
-              'Se connecter',
-              style: TextStyle(color: Colors.white, fontSize: 18),
+              appLocalizations?.loginButton ?? 'Se connecter',
+              style: const TextStyle(color: Colors.white, fontSize: 18),
             ),
           ),
         ),

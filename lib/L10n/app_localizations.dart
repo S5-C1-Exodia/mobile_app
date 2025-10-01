@@ -37,6 +37,10 @@ class AppLocalizations {
   String get english => _isEn ? 'English' : 'Anglais';
   String get close => _isEn ? 'Close' : 'Fermer';
   String get settings => _isEn ? 'Settings' : 'Paramètres';
+  String get loginButton => _isEn ? 'Login' : 'Connexion';
+  String get login => _isEn ? 'Login' : 'Connexion';
+  String get logout => _isEn ? 'Logout' : 'Déconnexion';
+  String get connectToAnotherApi => _isEn ? 'Connect to another API' : 'Se connecter à une autre API';
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:mobile_app/Screens/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_app/providers/app_provider.dart';
 import 'package:mobile_app/L10n/app_localizations.dart';
-import 'Screens/playlist_screen.dart';
+import 'Screens/login_screen.dart';
 import 'core/theme/palettes.dart';
 
 
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
         Locale('en'),
       ],
       theme: themeData,
-      home: PlaylistsScreen(
+      home: LoginScreen(
         palette: currentPalette,
         onToggleTheme: appProvider.toggleTheme,
       ),
