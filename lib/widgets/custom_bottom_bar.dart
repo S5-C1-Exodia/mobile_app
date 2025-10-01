@@ -3,104 +3,67 @@ import 'package:provider/provider.dart';
 import 'package:mobile_app/L10n/app_localizations.dart';
 import '../providers/app_provider.dart';
 import '../core/theme/palettes.dart';
+import 'nav_item.dart';
 
 class CustomBottomBar extends StatelessWidget {
   final int currentIndex;
-  final Function(int) onTap;
+  final ValueChanged<int> onTap;
 
   const CustomBottomBar({
-    super.key,
+    Key? key,
     required this.currentIndex,
     required this.onTap,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final appProvider = Provider.of<AppProvider>(context);
-    final appLocalizations = AppLocalizations.of(context) ?? AppLocalizations(appProvider.locale);
+    final appLocalizations =
+        AppLocalizations.of(context) ?? AppLocalizations(appProvider.locale);
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
-    final AppPalette currentPalette = isDark ? paletteDark : paletteLight;
+    final AppPalette palette = isDark ? paletteDark : paletteLight;
 
     return Container(
       height: 80,
       decoration: BoxDecoration(
-        color: currentPalette.card,
+        color: palette.card,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(
-            context: context,
+          NavItem(
             icon: Icons.search,
             label: appLocalizations.playlists,
             index: 0,
-            currentPalette: currentPalette,
+            isActive: currentIndex == 0,
+            palette: palette,
+            onTap: onTap,
           ),
-          _buildNavItem(
-            context: context,
+          NavItem(
             icon: Icons.music_note,
             label: appLocalizations.songs,
             index: 1,
-            currentPalette: currentPalette,
+            isActive: currentIndex == 1,
+            palette: palette,
+            onTap: onTap,
           ),
-          _buildNavItem(
-            context: context,
+          NavItem(
             icon: Icons.history,
             label: appLocalizations.history,
             index: 2,
-            currentPalette: currentPalette,
+            isActive: currentIndex == 2,
+            palette: palette,
+            onTap: onTap,
           ),
-          _buildNavItem(
-            context: context,
+          NavItem(
             icon: Icons.person,
             label: appLocalizations.profile,
             index: 3,
-            currentPalette: currentPalette,
+            isActive: currentIndex == 3,
+            palette: palette,
+            onTap: onTap,
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem({
-    required BuildContext context,
-    required IconData icon,
-    required String label,
-    required int index,
-    required AppPalette currentPalette,
-  }) {
-    final isActive = currentIndex == index;
-    final Color activeColor = currentPalette.accentGreen;
-    final Color inactiveColor = currentPalette.white;
-
-    return InkWell(
-      onTap: () => onTap(index),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            color: isActive ? activeColor : inactiveColor,
-            size: 28,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              color: isActive ? activeColor : inactiveColor,
-              fontSize: 12,
-            ),
-          ),
-          if (isActive)
-            Container(
-              width: 30,
-              height: 3,
-              decoration: BoxDecoration(
-                color: activeColor,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
         ],
       ),
     );

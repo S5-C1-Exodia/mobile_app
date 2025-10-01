@@ -17,8 +17,6 @@ class ActionButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Récupérer la palette courante depuis AppProvider pour que les couleurs
-    // changent dynamiquement lorsque le thème est modifié.
     final appProvider = Provider.of<AppProvider>(context);
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
     final AppPalette palette = isDark ? paletteDark : paletteLight;

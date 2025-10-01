@@ -6,6 +6,7 @@ import '../L10n/app_localizations.dart';
 import '../widgets/custom_app_bar.dart';
 import '../core/theme/palettes.dart';
 import '../providers/app_provider.dart';
+import 'profile_screen.dart';
 
 class SwipeScreen extends StatefulWidget {
   const SwipeScreen({super.key});
@@ -15,7 +16,9 @@ class SwipeScreen extends StatefulWidget {
 }
 
 class _SwipeScreenState extends State<SwipeScreen> {
-  int _currentIndex = 0;
+  int _cardIndex = 0;
+  int _navIndex = 1;
+  final GlobalKey<State> _dismissibleKey = GlobalKey<State>();
 
   final List<String> profileImages = [
     'assets/profilepictures/profile_1.jpg',
@@ -26,14 +29,34 @@ class _SwipeScreenState extends State<SwipeScreen> {
     'assets/profilepictures/profile_6.jpg',
   ];
 
+  void _handleNavigation(int index) {
+    if (index == 3) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ProfileScreen()),
+      );
+    } else {
+      setState(() {
+        _navIndex = index;
+      });
+    }
+  }
+
+  void _goToNextCard() {
+    if (_cardIndex < profileImages.length - 1) {
+      setState(() {
+        _cardIndex++;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final appProvider = Provider.of<AppProvider>(context);
     final appLocalizations = AppLocalizations.of(context) ?? AppLocalizations(appProvider.locale);
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
 
-    // Trace pour vérifier que SwipeScreen rebuild quand la locale/theme change
-    debugPrint('SwipeScreen.build: locale=${appProvider.locale}, theme=${appProvider.themeMode}, index=$_currentIndex');
+    debugPrint('SwipeScreen.build: locale=${appProvider.locale}, theme=${appProvider.themeMode}, cardIndex=$_cardIndex, navIndex=$_navIndex');
     final palette = isDark ? paletteDark : paletteLight;
 
     return Scaffold(
@@ -62,26 +85,38 @@ class _SwipeScreenState extends State<SwipeScreen> {
                   SizedBox(
                     width: 200,
                     height: 300,
-                    child: _currentIndex < profileImages.length
+                    child: _cardIndex < profileImages.length
                         ? Dismissible(
-                            key: ValueKey(profileImages[_currentIndex]),
-                            direction: DismissDirection.horizontal,
-                            onDismissed: (direction) {
-                              setState(() {
-                                _currentIndex++;
-                              });
-                            },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Image.asset(
-                                profileImages[_currentIndex],
-                                width: 200,
-                                height: 300,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          )
-                        : Container(),
+                      key: ValueKey('card_$_cardIndex'),
+                      direction: DismissDirection.horizontal,
+                      onDismissed: (direction) {
+                        _goToNextCard();
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.asset(
+                          profileImages[_cardIndex],
+                          width: 200,
+                          height: 300,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    )
+                        : Container(
+                      decoration: BoxDecoration(
+                        color: palette.card,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Aucune carte disponible',
+                          style: TextStyle(
+                            color: palette.white60,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 24),
                   Padding(
@@ -119,12 +154,8 @@ class _SwipeScreenState extends State<SwipeScreen> {
               ),
             ),
             CustomBottomBar(
-              currentIndex: _currentIndex,
-              onTap: (index) {
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
+              currentIndex: _navIndex,
+              onTap: _handleNavigation,
             ),
           ],
         ),
@@ -134,13 +165,16 @@ class _SwipeScreenState extends State<SwipeScreen> {
 
   void _handleDislike() {
     debugPrint('Dislike!');
+    _goToNextCard();
   }
 
   void _handleLike() {
     debugPrint('Like!');
+    _goToNextCard();
   }
 
   void _handleFavorite() {
     debugPrint('Favorite!');
+    _goToNextCard();
   }
 }
