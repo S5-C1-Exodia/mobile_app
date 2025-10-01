@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/settings_provider.dart';
+import '../providers/app_provider.dart';
 import 'package:mobile_app/L10n/app_localizations.dart';
 
 class SettingsPopup extends StatelessWidget {
@@ -9,50 +9,52 @@ class SettingsPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = Provider.of<SettingsProvider>(context);
+    final appProvider = Provider.of<AppProvider>(context);
+    final appLocalizations = AppLocalizations.of(context) ?? AppLocalizations(appProvider.locale);
+
     return AlertDialog(
-      title: Text(AppLocalizations.of(context)!.settings),
+      title: Text(appLocalizations.settings),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
-            title: Text(AppLocalizations.of(context)!.language),
+            title: Text(appLocalizations.language),
             trailing: DropdownButton<Locale>(
-              value: settings.locale,
+              value: appProvider.locale,
               onChanged: (Locale? newLocale) {
                 if (newLocale != null) {
-                  settings.setLocale(newLocale);
+                  appProvider.setLocale(newLocale);
                 }
               },
               items: [
                 DropdownMenuItem(
                   value: Locale('fr'),
-                  child: Text(AppLocalizations.of(context)!.french),
+                  child: Text(appLocalizations.french),
                 ),
                 DropdownMenuItem(
                   value: Locale('en'),
-                  child: Text(AppLocalizations.of(context)!.english),
+                  child: Text(appLocalizations.english),
                 ),
               ],
             ),
           ),
           ListTile(
-            title: Text(AppLocalizations.of(context)!.theme),
+            title: Text(appLocalizations.theme),
             trailing: DropdownButton<ThemeMode>(
-              value: settings.themeMode,
+              value: appProvider.themeMode,
               onChanged: (ThemeMode? newThemeMode) {
                 if (newThemeMode != null) {
-                  settings.setThemeMode(newThemeMode);
+                  appProvider.setThemeMode(newThemeMode);
                 }
               },
               items: [
                 DropdownMenuItem(
                   value: ThemeMode.light,
-                  child: Text(AppLocalizations.of(context)!.light),
+                  child: Text(appLocalizations.light),
                 ),
                 DropdownMenuItem(
                   value: ThemeMode.dark,
-                  child: Text(AppLocalizations.of(context)!.dark),
+                  child: Text(appLocalizations.dark),
                 ),
               ],
             ),
@@ -61,7 +63,7 @@ class SettingsPopup extends StatelessWidget {
       ),
       actions: [
         TextButton(
-          child: Text(AppLocalizations.of(context)!.close),
+          child: Text(appLocalizations.close),
           onPressed: () {
             Navigator.of(context).pop();
           },

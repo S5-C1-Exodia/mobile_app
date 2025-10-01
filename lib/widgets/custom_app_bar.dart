@@ -12,15 +12,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    // fallback si les localizations ne sont pas encore disponibles
-    final appLocalizations = AppLocalizations.of(context) ?? AppLocalizations();
+    // Récupérer d'abord le provider pour connaître la locale actuelle
     final appProvider = Provider.of<AppProvider>(context);
+    // fallback : si Localizations.of retourne null, construire AppLocalizations
+    // avec la locale courante du provider pour garantir un rendu cohérent
+    final appLocalizations = AppLocalizations.of(context) ?? AppLocalizations(appProvider.locale);
 
-    // Déterminer la palette courante comme dans main
+    // Trace pour vérifier que CustomAppBar rebuild quand la locale/theme change
+    debugPrint('CustomAppBar.build: locale=${appProvider.locale}, theme=${appProvider.themeMode}');
+
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
     final AppPalette currentPalette = isDark ? paletteDark : paletteLight;
 
-    // Couleur du titre dépendante de la palette
     final Color titleColor = currentPalette.accentGreen;
 
     return AppBar(

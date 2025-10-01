@@ -55,7 +55,7 @@ class PlaylistsList extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => SwipeScreen(),
+                                builder: (context) => const SwipeScreen(),
                               ),
                             );
                           },
@@ -64,9 +64,8 @@ class PlaylistsList extends StatelessWidget {
                     );
                   },
                 ),
-        ),
-      ],
-    );
-  }
-}
-
+         ),
+       ],
+     );
+   }
+ }

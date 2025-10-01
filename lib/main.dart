@@ -11,7 +11,7 @@ void main() {
   runApp(
     ChangeNotifierProvider(
       create: (context) => AppProvider(),
-      child: const MyApp(),
+      child: MyApp(),
     ),
   );
 }
@@ -21,6 +21,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Log pour vérifier que MyApp.build est appelé quand la locale/theme change
+    debugPrint('MyApp.build: locale=${Provider.of<AppProvider>(context).locale}, theme=${Provider.of<AppProvider>(context).themeMode}');
     final appProvider = Provider.of<AppProvider>(context);
     final isDark = appProvider.themeMode == ThemeMode.dark;
     final AppPalette currentPalette = isDark ? paletteDark : paletteLight;

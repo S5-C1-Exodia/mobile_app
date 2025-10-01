@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/app_provider.dart';
+import '../core/theme/palettes.dart';
 
 class ActionButtons extends StatelessWidget {
   final VoidCallback onDislike;
@@ -14,27 +17,39 @@ class ActionButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Récupérer la palette courante depuis AppProvider pour que les couleurs
+    // changent dynamiquement lorsque le thème est modifié.
+    final appProvider = Provider.of<AppProvider>(context);
+    final bool isDark = appProvider.themeMode == ThemeMode.dark;
+    final AppPalette palette = isDark ? paletteDark : paletteLight;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildActionButton(
           icon: Icons.close,
-          color: const Color(0xFFFF4458),
+          iconColor: palette.red,
           size: 60,
+          borderColor: palette.white30,
+          backgroundColor: palette.card,
           onPressed: onDislike,
         ),
         const SizedBox(width: 32),
         _buildActionButton(
           icon: Icons.star,
-          color: const Color(0xFFFFD700),
+          iconColor: palette.yellow,
           size: 70,
+          borderColor: palette.white30,
+          backgroundColor: palette.card,
           onPressed: onFavorite,
         ),
         const SizedBox(width: 32),
         _buildActionButton(
           icon: Icons.favorite,
-          color: const Color(0xFF1DB954),
+          iconColor: palette.accentGreen,
           size: 60,
+          borderColor: palette.white30,
+          backgroundColor: palette.card,
           onPressed: onLike,
         ),
       ],
@@ -43,15 +58,14 @@ class ActionButtons extends StatelessWidget {
 
   Widget _buildActionButton({
     required IconData icon,
-    required Color color,
+    required Color iconColor,
     required double size,
+    required Color borderColor,
+    required Color backgroundColor,
     required VoidCallback onPressed,
   }) {
-    // Utiliser color.withAlpha pour définir l'opacité du bord
-    final borderColor = color.withAlpha((0.3 * 255).round());
-
     return Material(
-      color: const Color(0xFF282828),
+      color: backgroundColor,
       borderRadius: BorderRadius.circular(size / 2),
       child: InkWell(
         onTap: onPressed,
@@ -68,7 +82,7 @@ class ActionButtons extends StatelessWidget {
           ),
           child: Icon(
             icon,
-            color: color,
+            color: iconColor,
             size: size * 0.5,
           ),
         ),

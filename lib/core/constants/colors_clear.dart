@@ -8,4 +8,6 @@ class AppColorsClear {
   static const Color white70 = Color(0xFFA6A6A6);
   static const Color white60 = Color(0xFFFF4E6B);
   static const Color white30 = Color(0xFFA6A6A6);
+  static const Color red = Color(0xFFFF0436);
+  static const Color yellow = Color(0xFFFBCA41);
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../widgets/action_buttons.dart';
 import '../widgets/custom_bottom_bar.dart';
 import '../L10n/app_localizations.dart';
 import '../widgets/custom_app_bar.dart';
+import '../core/theme/palettes.dart';
+import '../providers/app_provider.dart';
 
 class SwipeScreen extends StatefulWidget {
   const SwipeScreen({super.key});
@@ -25,11 +28,17 @@ class _SwipeScreenState extends State<SwipeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final appLocalizations = AppLocalizations.of(context) ?? AppLocalizations();
+    final appProvider = Provider.of<AppProvider>(context);
+    final appLocalizations = AppLocalizations.of(context) ?? AppLocalizations(appProvider.locale);
+    final bool isDark = appProvider.themeMode == ThemeMode.dark;
+
+    // Trace pour vérifier que SwipeScreen rebuild quand la locale/theme change
+    debugPrint('SwipeScreen.build: locale=${appProvider.locale}, theme=${appProvider.themeMode}, index=$_currentIndex');
+    final palette = isDark ? paletteDark : paletteLight;
 
     return Scaffold(
-      appBar: const CustomAppBar(titleKey: 'appTitle'),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: CustomAppBar(titleKey: 'appTitle'),
+      backgroundColor: palette.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -42,7 +51,7 @@ class _SwipeScreenState extends State<SwipeScreen> {
                     child: Text(
                       appLocalizations.playlists,
                       style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
+                        color: palette.white70,
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 1.2,
@@ -80,7 +89,7 @@ class _SwipeScreenState extends State<SwipeScreen> {
                     child: Text(
                       appLocalizations.outsideInTheNight,
                       style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
+                        color: palette.white,
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
@@ -93,7 +102,7 @@ class _SwipeScreenState extends State<SwipeScreen> {
                     child: Text(
                       appLocalizations.laylow,
                       style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyMedium?.color ?? const Color(0xFF9E9E9E),
+                        color: palette.white60,
                         fontSize: 16,
                       ),
                       textAlign: TextAlign.center,

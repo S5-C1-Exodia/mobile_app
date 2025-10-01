@@ -16,11 +16,19 @@ class PlaylistsScreen extends StatelessWidget {
       Playlist(name: 'Workout', autor: 'Ninho', tracks: []),
       Playlist(name: 'Focus', autor: 'Booba', tracks: []),
       Playlist(name: 'Hits', autor: 'Aya Nakamura', tracks: []),
+      Playlist(name: 'Classics', autor: 'Jul', tracks: []),
+      Playlist(name: 'Party', autor: 'PNL', tracks: []),
+      Playlist(name: 'Relax', autor: 'SCH', tracks: []),
+      Playlist(name: 'Road Trip', autor: 'Kaaris', tracks: []),
+      Playlist(name: 'Sleep', autor: 'Lomepal', tracks: []),
+      Playlist(name: 'Jazz', autor: 'Orelsan', tracks: []),
+      Playlist(name: 'Rock', autor: 'Soprano', tracks: []),
+      Playlist(name: 'Pop', autor: 'Vianney', tracks: []),
     ];
 
     return Scaffold(
       backgroundColor: palette.background,
-      appBar: const CustomAppBar(titleKey: 'appTitle'),
+      appBar: CustomAppBar(titleKey: 'appTitle'),
       body: PlaylistsList(playlists: samplePlaylists, palette: palette),
     );
 
