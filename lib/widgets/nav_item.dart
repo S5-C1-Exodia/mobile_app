@@ -28,7 +28,7 @@ class NavItem extends StatelessWidget {
       onTap: () => onTap(index),
       borderRadius: BorderRadius.circular(16),
       child: SizedBox(
-        width: 70,
+        width: 80,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

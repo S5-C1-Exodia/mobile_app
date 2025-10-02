@@ -72,7 +72,7 @@ class _SwipeScreenState extends State<SwipeScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Text(
-                      appLocalizations.playlists,
+                      'nom playlist',
                       style: TextStyle(
                         color: palette.white70,
                         fontSize: 18,

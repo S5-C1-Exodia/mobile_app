@@ -34,7 +34,7 @@ class CustomBottomBar extends StatelessWidget {
         children: [
           NavItem(
             icon: Icons.search,
-            label: appLocalizations.playlists,
+            label: appLocalizations.search,
             index: 0,
             isActive: currentIndex == 0,
             palette: palette,
@@ -42,7 +42,7 @@ class CustomBottomBar extends StatelessWidget {
           ),
           NavItem(
             icon: Icons.music_note,
-            label: appLocalizations.songs,
+            label: appLocalizations.playlists,
             index: 1,
             isActive: currentIndex == 1,
             palette: palette,
