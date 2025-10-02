@@ -1,6 +1,6 @@
-import 'package:mobile_app/models/daos/interfaces/IPlaylistDAO.dart';
-import 'package:mobile_app/models/dtos/playlistDTO.dart';
-import 'package:mobile_app/models/dtos/playlistsDTO.dart';
+import 'package:mobile_app/models/daos/interfaces/i_playlist_dao.dart';
+import 'package:mobile_app/models/dtos/playlist_dto.dart';
+import 'package:mobile_app/models/dtos/playlists_dto.dart';
 
 class FakePlaylistDAO implements IPlaylistDAO {
   final PlaylistsDTO datas;
