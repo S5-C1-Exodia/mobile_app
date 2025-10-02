@@ -4,6 +4,8 @@ import '../core/theme/palettes.dart';
 import '../providers/app_provider.dart';
 import '../L10n/app_localizations.dart';
 import 'login_screen.dart';
+import '../widgets/custom_app_bar.dart';
+import '../widgets/custom_bottom_bar.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
@@ -14,7 +16,7 @@ class ProfileScreen extends StatelessWidget {
     final appLocalizations = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(appLocalizations?.profile ?? 'Profil')),
+      appBar: CustomAppBar(titleKey: appLocalizations?.profile ?? 'Profil'),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -45,6 +47,9 @@ class ProfileScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomBar(
+        currentIndex: 3, onTap: (int value) {  },
       ),
     );
   }

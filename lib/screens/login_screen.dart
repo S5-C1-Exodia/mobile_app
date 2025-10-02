@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/L10n/app_localizations.dart';
 import '../core/theme/palettes.dart';
 import 'playlist_screen.dart';
+import '../widgets/custom_app_bar.dart';
 
 class LoginScreen extends StatelessWidget {
   final AppPalette palette;
@@ -18,7 +19,7 @@ class LoginScreen extends StatelessWidget {
     final appLocalizations = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(appLocalizations?.login ?? 'Connexion')),
+      appBar: CustomAppBar(titleKey: appLocalizations?.login ?? 'Connexion'),
       body: Center(
         child: GestureDetector(
           onTap: () {
