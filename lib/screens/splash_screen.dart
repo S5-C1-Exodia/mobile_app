@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
 import '../core/theme/palettes.dart';
 import 'login_screen.dart';
+import 'package:lottie/lottie.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -57,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen>
     });
 
     // Navigation vers l'écran de connexion après l'animation
-    Future.delayed(const Duration(milliseconds: 3500), () {
+    Future.delayed(const Duration(milliseconds: 5000), () {
       if (mounted) {
         Navigator.pushReplacement(
           context,
@@ -133,13 +134,12 @@ class _SplashScreenState extends State<SplashScreen>
                     const SizedBox(height: 20),
                     // Indicateur de chargement
                     SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          palette.accentGreen,
-                        ),
-                        strokeWidth: 3,
+                      width: 240,
+                      height: 240,
+                      child: Lottie.asset(
+                        'assets/animations/turning_cat.json',
+                        repeat: true,
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ],
