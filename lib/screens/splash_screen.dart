@@ -4,6 +4,8 @@ import '../providers/app_provider.dart';
 import '../core/theme/palettes.dart';
 import 'login_screen.dart';
 import 'package:lottie/lottie.dart';
+import 'package:audioplayers/audioplayers.dart';
+
 
 
 class SplashScreen extends StatefulWidget {
@@ -25,6 +27,7 @@ class _SplashScreenState extends State<SplashScreen>
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
+  final AudioPlayer _audioPlayer = AudioPlayer();
   String _displayedText = 'S';
 
   @override
@@ -35,6 +38,9 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(milliseconds: 2500),
       vsync: this,
     );
+
+    _audioPlayer.play(AssetSource('sounds/openingSound.mp3'));
+
 
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
@@ -91,6 +97,8 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void dispose() {
     _controller.dispose();
+    _audioPlayer.stop();
+    _audioPlayer.dispose();
     super.dispose();
   }
 
