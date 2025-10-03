@@ -7,18 +7,18 @@ class FakePlaylistDAO implements IPlaylistDAO {
 
   FakePlaylistDAO()
       : datas = PlaylistsDTO(playlists: [
-          PlaylistDTO(id: "1", name: "Voiture", owner: "Exodia", imageUrl: "imageUrl"),
-          PlaylistDTO(id: "2", name: "Travail", owner: "Exodia", imageUrl: "imageUrl"),
-          PlaylistDTO(id: "3", name: "Sport", owner: "Exodia", imageUrl: "imageUrl")
+          PlaylistDTO(id: "1", name: "Voiture", owner: "Exodia", imageUrl: "imageUrl", tracks: []),
+          PlaylistDTO(id: "2", name: "Travail", owner: "Exodia", imageUrl: "imageUrl", tracks: []),
+          PlaylistDTO(id: "3", name: "Sport", owner: "Exodia", imageUrl: "imageUrl", tracks: [])
         ]);
-
+  
   @override
-  Future<PlaylistsDTO?> getAllPlaylists() async {
+  Future<PlaylistsDTO> getAllPlaylists() async {
     return datas;
   }
 
   @override
-  Future<PlaylistDTO?> getPlaylistById(String id) async {
+  Future<PlaylistDTO> getPlaylistById(String id) async {
     PlaylistDTO? result = null;
       result = datas.playlists.firstWhere(
         (playlist) => playlist.id == id,
