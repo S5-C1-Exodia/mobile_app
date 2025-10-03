@@ -16,7 +16,6 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        /// 👇 injection de AppProvider
         ChangeNotifierProvider(
           create: (_) => AppProvider(),
         ),
