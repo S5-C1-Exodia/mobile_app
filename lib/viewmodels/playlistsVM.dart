@@ -1,29 +1,35 @@
 import 'package:flutter/foundation.dart';
 import 'package:mobile_app/models/daos/interfaces/IPlaylistDAO.dart';
-import 'package:mobile_app/models/dtos/playlistsDTO.dart';
-import 'package:mobile_app/viewmodels/playlistVM.dart';
+import 'package:mobile_app/models/playlists.dart';
+import 'package:mobile_app/models/playlist.dart';
 
 class PlaylistsVM extends ChangeNotifier {
-  PlaylistsDTO model;
-  List<PlaylistVM> list_playlist;
   final IPlaylistDAO dao;
 
-  PlaylistsVM({
-    required this.model,
-    required this.list_playlist,
-    required this.dao,
-  });
+  List<Playlist> _playlists = [];
+  List<Playlist> get playlists => _playlists;
 
-  Future<void> refreshPlaylistList() async {
-    final playlists = await dao.getAllPlaylists();
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
 
-    model = playlists;
+  String? _errorMessage;
+  String? get errorMessage => _errorMessage;
 
-    list_playlist = [];
-    model.playlists.forEach((playlist){
-      list_playlist.add(PlaylistVM(model: playlist));
-      });
+  PlaylistsVM({required this.dao});
 
+  Future<void> loadPlaylists() async {
+    _isLoading = true;
+    _errorMessage = null;
     notifyListeners();
+
+    try {
+      final Playlists data = await dao.getAllPlaylists();
+      _playlists = data.playlists;
+    } catch (e) {
+      _errorMessage = "Erreur lors du chargement des playlists";
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 }
