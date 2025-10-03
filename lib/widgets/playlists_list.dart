@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/Screens/swipe_screen.dart';
+import 'package:provider/provider.dart';
 import '../core/theme/palettes.dart';
 import '../models/playlist.dart';
+import '../providers/app_provider.dart';
 
 class PlaylistsList extends StatelessWidget {
   final List<Playlist> playlists;
@@ -10,6 +12,10 @@ class PlaylistsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appProvider = Provider.of<AppProvider>(context);
+    final bool isDark = appProvider.themeMode == ThemeMode.dark;
+    final AppPalette palette = isDark ? paletteDark : paletteLight;
+
     return Column(
       children: [
         Expanded(

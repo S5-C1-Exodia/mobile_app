@@ -73,7 +73,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
 
-        // Petit bouton thème (soleil / lune)
         Padding(
           padding: const EdgeInsets.only(right: 12.0),
           child: IconButton(

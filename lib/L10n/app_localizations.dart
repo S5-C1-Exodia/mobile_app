@@ -15,7 +15,7 @@ class AppLocalizations {
 
   String get appTitle => 'SwipeZ';
   String get selectPlaylist => _isEn ? 'Select a playlist' : 'Sélectionnez une playlist';
-  String get playlists => _isEn ? 'Playlists' : 'Playlists';
+  String get playlists => _isEn ? 'My playlists' : 'Mes playlists';
   String get songs => _isEn ? 'Songs' : 'Sons';
   String get history => _isEn ? 'History' : 'Historique';
   String get profile => _isEn ? 'Profile' : 'Profil';
@@ -37,6 +37,13 @@ class AppLocalizations {
   String get english => _isEn ? 'English' : 'Anglais';
   String get close => _isEn ? 'Close' : 'Fermer';
   String get settings => _isEn ? 'Settings' : 'Paramètres';
+  String get loginButton => _isEn ? 'Login' : 'Connexion';
+  String get login => _isEn ? 'Login' : 'Connexion';
+  String get logout => _isEn ? 'Logout' : 'Déconnexion';
+  String get connectToAnotherApi => _isEn ? 'Connect to another API' : 'Se connecter à une autre API';
+  String get search => _isEn ? 'Search' : 'Recherche';
+  get loginAppleMusic => _isEn ? 'Login with Apple Music' : 'Connexion avec Apple Music';
+  get loginSpotify => _isEn ? 'Login with Spotify' : 'Connexion avec Spotify';
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

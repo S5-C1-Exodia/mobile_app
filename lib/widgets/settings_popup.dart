@@ -4,7 +4,6 @@ import '../providers/app_provider.dart';
 import 'package:mobile_app/L10n/app_localizations.dart';
 
 class SettingsPopup extends StatelessWidget {
-  // Ajout d'un constructeur public avec key
   const SettingsPopup({super.key});
 
   @override
