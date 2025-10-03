@@ -15,6 +15,29 @@ class CustomBottomBar extends StatelessWidget {
     required this.onTap,
   }) : super(key: key);
 
+  void _handleTap(BuildContext context, int index) {
+    if (index == 0) {
+      if (currentIndex != 0) {
+        // Navigation vers la SearchScreen via route nommée
+        Navigator.pushReplacementNamed(context, '/search');
+      }
+    } else if (index == 1) {
+      if (currentIndex != 1) {
+        Navigator.pushReplacementNamed(context, '/playlists');
+      }
+    } else if (index == 2) {
+      if (currentIndex != 2) {
+        Navigator.pushReplacementNamed(context, '/history');
+      }
+    } else if (index == 3) {
+      if (currentIndex != 3) {
+        Navigator.pushReplacementNamed(context, '/profile');
+      }
+    } else {
+      onTap(index);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final appProvider = Provider.of<AppProvider>(context);
@@ -38,7 +61,7 @@ class CustomBottomBar extends StatelessWidget {
             index: 0,
             isActive: currentIndex == 0,
             palette: palette,
-            onTap: onTap,
+            onTap: (i) => _handleTap(context, i),
           ),
           NavItem(
             icon: Icons.music_note,
@@ -46,7 +69,7 @@ class CustomBottomBar extends StatelessWidget {
             index: 1,
             isActive: currentIndex == 1,
             palette: palette,
-            onTap: onTap,
+            onTap: (i) => _handleTap(context, i),
           ),
           NavItem(
             icon: Icons.history,
@@ -54,7 +77,7 @@ class CustomBottomBar extends StatelessWidget {
             index: 2,
             isActive: currentIndex == 2,
             palette: palette,
-            onTap: onTap,
+            onTap: (i) => _handleTap(context, i),
           ),
           NavItem(
             icon: Icons.person,
@@ -62,7 +85,7 @@ class CustomBottomBar extends StatelessWidget {
             index: 3,
             isActive: currentIndex == 3,
             palette: palette,
-            onTap: onTap,
+            onTap: (i) => _handleTap(context, i),
           ),
         ],
       ),
