@@ -1,7 +1,7 @@
-import 'package:mobile_app/models/dtos/trackDTO.dart';
+import 'package:mobile_app/models/track.dart';
 
 class TrackVM{
-  final TrackDTO model;
+  final Track model;
 
   TrackVM({required this.model});
 

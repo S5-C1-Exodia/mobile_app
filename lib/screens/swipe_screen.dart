@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/viewmodels/playlistVM.dart';
 import 'package:provider/provider.dart';
 import '../widgets/action_buttons.dart';
 import '../widgets/custom_bottom_bar.dart';
@@ -25,6 +26,10 @@ class _SwipeScreenState extends State<SwipeScreen> {
     'assets/profilepictures/profile_5.jpg',
     'assets/profilepictures/profile_6.jpg',
   ];
+
+  final PlaylistVM playlistVM;
+
+  _SwipeScreenState(this.playlistVM);
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +92,7 @@ class _SwipeScreenState extends State<SwipeScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Text(
-                      appLocalizations.outsideInTheNight,
+                      playlistVM.current.model.title,
                       style: TextStyle(
                         color: palette.white,
                         fontSize: 24,
