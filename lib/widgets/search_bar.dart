@@ -4,15 +4,23 @@ import '../core/theme/palettes.dart';
 import '../providers/app_provider.dart';
 import '../L10n/app_localizations.dart';
 
+/// A custom search bar widget with a clear button and theming support.
+///
+/// This widget displays a text field for search input, with a search icon,
+/// a clear button when text is entered, and adapts its style to the current theme.
+/// It uses [AppProvider] for theme and locale, and [AppLocalizations] for localized strings.
+///
+/// Parameters:
+/// - [onChanged]: Callback triggered when the search query changes.
 class SearchBarWidget extends StatefulWidget {
   final ValueChanged<String>? onChanged;
   const SearchBarWidget({super.key, this.onChanged});
-
 
   @override
   State<SearchBarWidget> createState() => _SearchBarWidgetState();
 }
 
+/// State for [SearchBarWidget], manages the search query and text controller.
 class _SearchBarWidgetState extends State<SearchBarWidget> {
   String _query = '';
   final TextEditingController _controller = TextEditingController();
@@ -45,7 +53,10 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
         prefixIcon: Icon(Icons.search, color: palette.accentGreen),
         filled: true,
         fillColor: palette.card,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide(color: palette.white30),
@@ -68,4 +79,3 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
     );
   }
 }
-

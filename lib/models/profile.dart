@@ -1,3 +1,7 @@
+/// A model class representing a user profile.
+///
+/// Contains information such as the user's unique identifier, name, age,
+/// description, and the source URL of the profile image.
 class Profile {
   final String id;
   final String userName;
@@ -5,6 +9,9 @@ class Profile {
   final String userDescription;
   final String profileImageSrc;
 
+  /// Creates a [Profile] instance with the given properties.
+  ///
+  /// All parameters are required.
   Profile({
     required this.id,
     required this.userName,
@@ -13,6 +20,9 @@ class Profile {
     required this.profileImageSrc,
   });
 
+  /// Creates a [Profile] instance from a JSON map.
+  ///
+  /// [json] is a map containing the profile data.
   factory Profile.fromJson(Map<String, dynamic> json) {
     return Profile(
       id: json['id'],

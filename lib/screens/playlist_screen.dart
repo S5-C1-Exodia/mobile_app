@@ -7,10 +7,32 @@ import '../widgets/playlists_list.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_bottom_bar.dart';
 
+/// A stateless widget that displays a list of playlists in the app.
+///
+/// The screen includes:
+/// - A custom app bar with the app title.
+/// - A list of sample playlists, each with a name and author.
+/// - A custom bottom navigation bar with the playlists tab selected.
+///
+/// The appearance adapts to the current theme (light or dark).
+///
+/// Parameters:
+/// - [onToggleTheme]: Callback to toggle the app theme.
+/// - [palette]: The color palette to use for theming.
+///
+/// Usage:
+/// ```dart
+/// PlaylistsScreen(onToggleTheme: ..., palette: ...)
+/// ```
 class PlaylistsScreen extends StatelessWidget {
   final VoidCallback onToggleTheme;
   final AppPalette palette;
-  const PlaylistsScreen({super.key, required this.onToggleTheme, required this.palette});
+
+  const PlaylistsScreen({
+    super.key,
+    required this.onToggleTheme,
+    required this.palette,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +62,10 @@ class PlaylistsScreen extends StatelessWidget {
       bottomNavigationBar: CustomBottomBar(
         currentIndex: 1,
         onTap: (i) {
-          // Placeholder navigation pour les autres onglets (à compléter selon besoin)
-          // index 0 est géré dans CustomBottomBar (search)
           if (i == 3) {
-            // Aller au profil
-            // TODO: implémenter navigation profil si nécessaire
           }
         },
       ),
     );
-
   }
 }

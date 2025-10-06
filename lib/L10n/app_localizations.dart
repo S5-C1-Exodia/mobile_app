@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-
+/// Provides localized strings for the application based on the current [Locale].
+///
+/// This class contains all the translatable strings used in the app and
+/// returns the appropriate translation depending on the user's language.
+/// Currently supports English ('en') and French ('fr').
 class AppLocalizations {
   final Locale locale;
 
@@ -46,17 +50,26 @@ class AppLocalizations {
   get loginSpotify => _isEn ? 'Login with Spotify' : 'Connexion avec Spotify';
 }
 
+/// A delegate class that loads and provides [AppLocalizations] for supported locales.
+///
+/// This delegate is used by Flutter's localization system to load the appropriate
+/// [AppLocalizations] instance based on the user's locale.
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
+  /// Returns `true` if the given [locale] is supported.
   @override
   bool isSupported(Locale locale) => ['fr', 'en'].contains(locale.languageCode);
 
+  /// Loads the [AppLocalizations] for the given [locale].
   @override
   Future<AppLocalizations> load(Locale locale) async {
     return AppLocalizations(locale);
   }
 
+  /// Determines whether the delegate should reload.
+  ///
+  /// Always returns `false` as reloading is not necessary.
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }

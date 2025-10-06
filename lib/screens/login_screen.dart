@@ -4,7 +4,26 @@ import 'package:mobile_app/L10n/app_localizations.dart';
 import '../core/theme/palettes.dart';
 import 'playlist_screen.dart';
 import '../widgets/custom_app_bar.dart';
+import '../widgets/login_button.dart';
 
+/// A stateless widget that displays the login screen for the application.
+///
+/// The screen includes:
+/// - A custom app bar with a localized title.
+/// - An animated Lottie asset (cat animation) as a visual element.
+/// - Two login buttons: one for Spotify (enabled) and one for Apple Music (disabled).
+///   - The Spotify button navigates to the [PlaylistsScreen] upon successful login.
+///   - The Apple Music button is currently disabled.
+/// - The appearance adapts to the provided color palette and localization.
+///
+/// Parameters:
+/// - [palette]: The color palette to use for theming.
+/// - [onToggleTheme]: Callback to toggle the app theme.
+///
+/// Usage:
+/// ```dart
+/// LoginScreen(palette: palette, onToggleTheme: onToggleTheme)
+/// ```
 class LoginScreen extends StatelessWidget {
   final AppPalette palette;
   final VoidCallback onToggleTheme;
@@ -32,7 +51,7 @@ class LoginScreen extends StatelessWidget {
               repeat: true,
             ),
             const SizedBox(height: 32),
-            _LoginButton(
+            LoginButton(
               text: appLocalizations?.loginSpotify ?? 'Connexion à Spotify',
               color: Colors.green,
               onPressed: () {
@@ -50,7 +69,7 @@ class LoginScreen extends StatelessWidget {
               enabled: true,
             ),
             const SizedBox(height: 24),
-            _LoginButton(
+            LoginButton(
               text:
                   appLocalizations?.loginAppleMusic ??
                   'Connexion à Apple Music',
@@ -58,85 +77,6 @@ class LoginScreen extends StatelessWidget {
               onPressed: () {},
               imageAsset: 'assets/images/logo_apple.png',
               enabled: false,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _LoginButton extends StatefulWidget {
-  final String text;
-  final Color color;
-  final VoidCallback onPressed;
-  final String imageAsset;
-  final bool enabled;
-
-  const _LoginButton({
-    required this.text,
-    required this.color,
-    required this.onPressed,
-    required this.imageAsset,
-    required this.enabled,
-  });
-
-  @override
-  State<_LoginButton> createState() => _LoginButtonState();
-}
-
-class _LoginButtonState extends State<_LoginButton> {
-  bool _pressed = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: widget.enabled ? (_) => setState(() => _pressed = true) : null,
-      onTapUp: widget.enabled
-          ? (_) {
-              setState(() => _pressed = false);
-              widget.onPressed();
-            }
-          : null,
-      onTapCancel: widget.enabled
-          ? () => setState(() => _pressed = false)
-          : null,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 100),
-        width: 320,
-        height: 60,
-        decoration: BoxDecoration(
-          color: widget.enabled ? widget.color : Colors.grey[400],
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: _pressed
-              ? [
-                  BoxShadow(
-                    color: Colors.black26,
-                    offset: Offset(2, 2),
-                    blurRadius: 2,
-                  ),
-                ]
-              : [
-                  BoxShadow(
-                    color: Colors.black38,
-                    offset: Offset(4, 4),
-                    blurRadius: 8,
-                  ),
-                ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(widget.imageAsset, width: 32, height: 32),
-            const SizedBox(width: 16),
-            Text(
-              widget.text,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.1,
-              ),
             ),
           ],
         ),
