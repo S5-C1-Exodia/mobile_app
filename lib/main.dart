@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mobile_app/screens/splash_screen.dart';
+//import 'package:mobile_app/screens/search_screen.dart';
+import 'package:mobile_app/screens/playlist_screen.dart';
+import 'package:mobile_app/screens/profile_screen.dart';
+//import 'package:mobile_app/screens/history_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_app/providers/app_provider.dart';
 import 'package:mobile_app/L10n/app_localizations.dart';
@@ -11,7 +15,7 @@ void main() {
   runApp(
     ChangeNotifierProvider(
       create: (context) => AppProvider(),
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
@@ -49,8 +53,13 @@ class MyApp extends StatelessWidget {
         Locale('en'),
       ],
       theme: themeData,
-      home: SplashScreen(palette: currentPalette, onToggleTheme: appProvider.toggleTheme
-      ),
+      routes: {
+        //'/search': (context) => const SearchScreen(),
+        '/playlists': (context) => const PlaylistsScreen(),
+        //'/history': (context) => const HistoryScreen(),
+        '/profile': (context) => ProfileScreen(),
+      },
+      home: const SplashScreen(),
     );
   }
 }

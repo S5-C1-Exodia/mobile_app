@@ -5,11 +5,10 @@ import '../models/playlist.dart';
 import '../providers/app_provider.dart';
 import '../widgets/playlists_list.dart';
 import '../widgets/custom_app_bar.dart';
+import '../widgets/custom_bottom_bar.dart';
 
 class PlaylistsScreen extends StatelessWidget {
-  final VoidCallback onToggleTheme;
-  final AppPalette palette;
-  const PlaylistsScreen({super.key, required this.onToggleTheme, required this.palette});
+  const PlaylistsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +34,18 @@ class PlaylistsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: palette.background,
       appBar: CustomAppBar(titleKey: 'appTitle'),
-      body: PlaylistsList(playlists: samplePlaylists, palette: palette),
+      body: PlaylistsList(playlists: samplePlaylists),
+      bottomNavigationBar: CustomBottomBar(
+        currentIndex: 1,
+        onTap: (i) {
+          // Placeholder navigation pour les autres onglets (à compléter selon besoin)
+          // index 0 est géré dans CustomBottomBar (search)
+          if (i == 3) {
+            // Aller au profil
+            // TODO: implémenter navigation profil si nécessaire
+          }
+        },
+      ),
     );
 
   }

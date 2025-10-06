@@ -42,6 +42,9 @@ class AppLocalizations {
   String get logout => _isEn ? 'Logout' : 'Déconnexion';
   String get connectToAnotherApi => _isEn ? 'Connect to another API' : 'Se connecter à une autre API';
   String get search => _isEn ? 'Search' : 'Recherche';
+
+  String get loginSpotify => _isEn ? 'Login with Spotify' : 'Connexion avec Spotify';
+  String get loginAppleMusic => _isEn ? 'Login with Apple Music' : 'Connexion avec Apple Music';
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

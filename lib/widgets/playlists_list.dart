@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/Screens/swipe_screen.dart';
+import '../screens/swipe_screen.dart';
 import 'package:provider/provider.dart';
 import '../core/theme/palettes.dart';
 import '../models/playlist.dart';
@@ -7,8 +7,8 @@ import '../providers/app_provider.dart';
 
 class PlaylistsList extends StatelessWidget {
   final List<Playlist> playlists;
-  final AppPalette palette;
-  const PlaylistsList({super.key, required this.playlists, required this.palette});
+
+  const PlaylistsList({super.key, required this.playlists});
 
   @override
   Widget build(BuildContext context) {

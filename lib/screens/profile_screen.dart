@@ -6,6 +6,7 @@ import '../L10n/app_localizations.dart';
 import 'login_screen.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_bottom_bar.dart';
+import 'settings_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
@@ -29,18 +30,34 @@ class ProfileScreen extends StatelessWidget {
                     'Se connecter à une autre API',
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
+
+            // Nouveau bouton Paramètres
+            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: palette.accentGreen,
+                foregroundColor: palette.white,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SettingsScreen()),
+                );
+              },
+              icon: const Icon(Icons.settings),
+              label: Text(appLocalizations?.settings ?? 'Paramètres'),
+            ),
+
+            const SizedBox(height: 16),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginScreen(
-                      palette: palette,
-                      onToggleTheme: appProvider.toggleTheme,
-                    ),
-                  ),
+                  MaterialPageRoute(builder: (context) {
+                    return LoginScreen();
+                  }),
                 );
               },
               child: Text(appLocalizations?.logout ?? 'Se déconnecter'),

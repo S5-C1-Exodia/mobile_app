@@ -6,17 +6,8 @@ import 'login_screen.dart';
 import 'package:lottie/lottie.dart';
 import 'package:audioplayers/audioplayers.dart';
 
-
-
 class SplashScreen extends StatefulWidget {
-  final AppPalette palette;
-  final VoidCallback onToggleTheme;
-
-  const SplashScreen({
-    Key? key,
-    required this.palette,
-    required this.onToggleTheme,
-  }) : super(key: key);
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -40,7 +31,6 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     _audioPlayer.play(AssetSource('sounds/openingSound.mp3'));
-
 
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
@@ -69,10 +59,8 @@ class _SplashScreenState extends State<SplashScreen>
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                LoginScreen(palette:  paletteDark, onToggleTheme: () {}),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
+            pageBuilder: (context, animation, secondaryAnimation) => const LoginScreen(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
               return FadeTransition(opacity: animation, child: child);
             },
             transitionDuration: const Duration(milliseconds: 500),
@@ -131,7 +119,7 @@ class _SplashScreenState extends State<SplashScreen>
                       ).createShader(bounds),
                       child: Text(
                         _displayedText,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 80,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
