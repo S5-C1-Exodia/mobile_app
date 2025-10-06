@@ -50,7 +50,7 @@ class _LoginButtonState extends State<LoginButton> {
           : null,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 100),
-        width: 320,
+        width: 350,
         height: 60,
         decoration: BoxDecoration(
           color: widget.enabled ? widget.color : Colors.grey[400],
