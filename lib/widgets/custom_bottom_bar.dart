@@ -5,6 +5,15 @@ import '../providers/app_provider.dart';
 import '../core/theme/palettes.dart';
 import 'nav_item.dart';
 
+/// A custom bottom navigation bar widget for the application.
+///
+/// Displays four navigation items (Search, Playlists, History, Profile) and highlights
+/// the currently selected one. Handles navigation between screens using named routes.
+/// The bar adapts its colors to the current theme using [AppPalette].
+///
+/// Parameters:
+/// - [currentIndex]: The index of the currently selected navigation item.
+/// - [onTap]: Callback triggered when a navigation item is tapped.
 class CustomBottomBar extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
@@ -14,6 +23,32 @@ class CustomBottomBar extends StatelessWidget {
     required this.currentIndex,
     required this.onTap,
   }) : super(key: key);
+
+  /// Handles tap events on navigation items and performs navigation if needed.
+  ///
+  /// Navigates to the corresponding screen using named routes if the tapped index
+  /// is different from the current one. Otherwise, calls the [onTap] callback.
+  void _handleTap(BuildContext context, int index) {
+    if (index == 0) {
+      if (currentIndex != 0) {
+        Navigator.pushReplacementNamed(context, '/search');
+      }
+    } else if (index == 1) {
+      if (currentIndex != 1) {
+        Navigator.pushReplacementNamed(context, '/playlists');
+      }
+    } else if (index == 2) {
+      if (currentIndex != 2) {
+        Navigator.pushReplacementNamed(context, '/history');
+      }
+    } else if (index == 3) {
+      if (currentIndex != 3) {
+        Navigator.pushReplacementNamed(context, '/profile');
+      }
+    } else {
+      onTap(index);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +73,7 @@ class CustomBottomBar extends StatelessWidget {
             index: 0,
             isActive: currentIndex == 0,
             palette: palette,
-            onTap: onTap,
+            onTap: (i) => _handleTap(context, i),
           ),
           NavItem(
             icon: Icons.music_note,
@@ -46,7 +81,7 @@ class CustomBottomBar extends StatelessWidget {
             index: 1,
             isActive: currentIndex == 1,
             palette: palette,
-            onTap: onTap,
+            onTap: (i) => _handleTap(context, i),
           ),
           NavItem(
             icon: Icons.history,
@@ -54,7 +89,7 @@ class CustomBottomBar extends StatelessWidget {
             index: 2,
             isActive: currentIndex == 2,
             palette: palette,
-            onTap: onTap,
+            onTap: (i) => _handleTap(context, i),
           ),
           NavItem(
             icon: Icons.person,
@@ -62,7 +97,7 @@ class CustomBottomBar extends StatelessWidget {
             index: 3,
             isActive: currentIndex == 3,
             palette: palette,
-            onTap: onTap,
+            onTap: (i) => _handleTap(context, i),
           ),
         ],
       ),

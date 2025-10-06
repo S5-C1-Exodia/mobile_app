@@ -4,9 +4,21 @@ import 'package:mobile_app/providers/app_provider.dart';
 import '../L10n/app_localizations.dart';
 import '../core/theme/palettes.dart';
 
+/// A custom app bar widget that displays the application title, a language selector,
+/// and a theme toggle button. The appearance adapts to the current theme and locale.
+///
+/// The title is localized and styled with a custom font and color. The language selector
+/// allows switching between French and English, and the theme toggle button switches
+/// between light and dark modes.
+///
+/// Parameters:
+/// - [titleKey]: The key used to localize the app bar title.
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String titleKey;
 
+  /// Creates a [CustomAppBar] widget.
+  ///
+  /// The [titleKey] parameter is required.
   const CustomAppBar({super.key, required this.titleKey});
 
   @override

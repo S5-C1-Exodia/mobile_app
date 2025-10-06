@@ -1,6 +1,19 @@
 import 'package:flutter/material.dart';
 import '../core/theme/palettes.dart';
 
+/// A navigation bar item widget for use in a custom bottom navigation bar.
+///
+/// Displays an icon and a label, and visually indicates when it is active.
+/// When tapped, it calls the [onTap] callback with its [index].
+/// The colors adapt based on the [isActive] state and the provided [AppPalette].
+///
+/// Parameters:
+/// - [icon]: The icon to display.
+/// - [label]: The text label below the icon.
+/// - [index]: The index of this item in the navigation bar.
+/// - [isActive]: Whether this item is currently active/selected.
+/// - [palette]: The color palette for theming.
+/// - [onTap]: Callback called with [index] when the item is tapped.
 class NavItem extends StatelessWidget {
   final IconData icon;
   final String label;

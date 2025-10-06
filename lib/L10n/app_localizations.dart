@@ -42,22 +42,30 @@ class AppLocalizations {
   String get logout => _isEn ? 'Logout' : 'Déconnexion';
   String get connectToAnotherApi => _isEn ? 'Connect to another API' : 'Se connecter à une autre API';
   String get search => _isEn ? 'Search' : 'Recherche';
-
-  String get loginSpotify => _isEn ? 'Login with Spotify' : 'Connexion avec Spotify';
-  String get loginAppleMusic => _isEn ? 'Login with Apple Music' : 'Connexion avec Apple Music';
+  String get loginSpotify => _isEn ? 'Login with Spotify' : 'Se connecter avec Spotify';
+  String get loginAppleMusic => _isEn ? 'Login with Apple Music' : 'Se connecter avec Apple Music';
 }
 
+/// A delegate class that loads and provides [AppLocalizations] for supported locales.
+///
+/// This delegate is used by Flutter's localization system to load the appropriate
+/// [AppLocalizations] instance based on the user's locale.
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
+  /// Returns `true` if the given [locale] is supported.
   @override
   bool isSupported(Locale locale) => ['fr', 'en'].contains(locale.languageCode);
 
+  /// Loads the [AppLocalizations] for the given [locale].
   @override
   Future<AppLocalizations> load(Locale locale) async {
     return AppLocalizations(locale);
   }
 
+  /// Determines whether the delegate should reload.
+  ///
+  /// Always returns `false` as reloading is not necessary.
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
