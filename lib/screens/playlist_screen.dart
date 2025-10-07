@@ -39,7 +39,7 @@ class PlaylistsScreen extends StatelessWidget {
     final appProvider = Provider.of<AppProvider>(context);
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
     final AppPalette palette = isDark ? paletteDark : paletteLight;
-
+    
     final List<Playlist> samplePlaylists = [
       Playlist(name: 'Chill Vibes', autor: 'Damso', tracks: []),
       Playlist(name: 'Workout', autor: 'Ninho', tracks: []),

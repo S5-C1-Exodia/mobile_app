@@ -6,6 +6,7 @@ import '../L10n/app_localizations.dart';
 import '../widgets/custom_app_bar.dart';
 import '../core/theme/palettes.dart';
 import '../providers/app_provider.dart';
+
 import 'profile_screen.dart';
 
 /// A screen that allows users to swipe through a series of profile images,
@@ -30,6 +31,7 @@ class SwipeScreen extends StatefulWidget {
   State<SwipeScreen> createState() => _SwipeScreenState();
 }
 
+
 /// State for [SwipeScreen], manages card and navigation indices,
 /// and handles user interactions.
 class _SwipeScreenState extends State<SwipeScreen> {
@@ -45,6 +47,7 @@ class _SwipeScreenState extends State<SwipeScreen> {
     'assets/profilepictures/profile_5.jpg',
     'assets/profilepictures/profile_6.jpg',
   ];
+
 
   /// Handles navigation bar item taps.
   ///
@@ -97,6 +100,7 @@ class _SwipeScreenState extends State<SwipeScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Text(
+
                       'nom playlist',
                       style: TextStyle(
                         color: palette.white70,
@@ -110,16 +114,17 @@ class _SwipeScreenState extends State<SwipeScreen> {
                   SizedBox(
                     width: 200,
                     height: 300,
+
                     child: _cardIndex < profileImages.length
                         ? Dismissible(
                             key: ValueKey('card_$_cardIndex'),
                             direction: DismissDirection.horizontal,
                             onDismissed: (direction) {
                               _goToNextCard();
-                            },
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
                               child: Image.asset(
+
                                 profileImages[_cardIndex],
                                 width: 200,
                                 height: 300,
