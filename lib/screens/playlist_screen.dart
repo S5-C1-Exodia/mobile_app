@@ -55,11 +55,7 @@ class PlaylistsScreen extends StatelessWidget {
       bottomNavigationBar: CustomBottomBar(
         currentIndex: 1,
         onTap: (i) {
-          // Placeholder navigation pour les autres onglets (à compléter selon besoin)
-          // index 0 est géré dans CustomBottomBar (search)
           if (i == 3) {
-            // Aller au profil
-            // TODO: implémenter navigation profil si nécessaire
           }
         },
       ),

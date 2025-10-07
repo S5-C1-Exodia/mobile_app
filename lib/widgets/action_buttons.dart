@@ -30,12 +30,9 @@ class ActionButtons extends StatelessWidget {
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
     final AppPalette palette = isDark ? paletteDark : paletteLight;
 
-    // Use LayoutBuilder to adapt button sizes and spacing to available width
     return LayoutBuilder(
       builder: (context, constraints) {
         final double maxWidth = constraints.maxWidth.isFinite ? constraints.maxWidth : MediaQuery.of(context).size.width;
-
-        // Determine button size and spacing based on available width
         double size;
         double spacing;
         if (maxWidth >= 500) {
@@ -49,7 +46,6 @@ class ActionButtons extends StatelessWidget {
           spacing = 16;
         }
 
-        // Use Wrap so buttons wrap to next line instead of overflowing
         return Center(
           child: Wrap(
             alignment: WrapAlignment.center,
@@ -68,7 +64,7 @@ class ActionButtons extends StatelessWidget {
               _buildActionButton(
                 icon: Icons.star,
                 iconColor: palette.yellow,
-                size: size * 1.15, // favorite slightly larger
+                size: size * 1.15,
                 borderColor: palette.white30,
                 backgroundColor: palette.card,
                 onPressed: onFavorite,

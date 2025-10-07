@@ -48,7 +48,6 @@ class ProfileScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // Nouveau bouton Paramètres
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                 backgroundColor: palette.accentGreen,

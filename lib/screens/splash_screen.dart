@@ -57,12 +57,10 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    // Animation du texte qui se déploie
     Future.delayed(const Duration(milliseconds: 800), () {
       _animateText();
     });
 
-    // Navigation vers l'écran de connexion après l'animation
     Future.delayed(const Duration(milliseconds: 5000), () {
       if (mounted) {
         Navigator.pushReplacement(
@@ -119,7 +117,6 @@ class _SplashScreenState extends State<SplashScreen>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Logo animé
                     ShaderMask(
                       shaderCallback: (bounds) => LinearGradient(
                         colors: [
@@ -138,7 +135,6 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                     ),
                     const SizedBox(height: 20),
-                    // Indicateur de chargement
                     SizedBox(
                       width: 240,
                       height: 240,

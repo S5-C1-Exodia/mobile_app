@@ -49,7 +49,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),
-      actions: [], // actions removed: language/theme selection moved to SettingsScreen
+      actions: [],
     );
   }
 

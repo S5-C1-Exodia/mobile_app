@@ -6,7 +6,17 @@ import '../core/theme/palettes.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_bottom_bar.dart';
 
+/// A stateless widget that displays the settings screen of the application.
+///
+/// This screen allows the user to:
+/// - Change the application language (French or English)
+/// - Switch between light and dark themes
+/// - Close the settings screen
+///
+/// The screen uses [AppProvider] for state management and localization,
+/// and adapts its appearance based on the current theme.
 class SettingsScreen extends StatelessWidget {
+  /// Creates a [SettingsScreen] widget.
   const SettingsScreen({Key? key}) : super(key: key);
 
   @override
@@ -14,7 +24,8 @@ class SettingsScreen extends StatelessWidget {
     final appProvider = Provider.of<AppProvider>(context);
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
     final AppPalette palette = isDark ? paletteDark : paletteLight;
-    final appLocalizations = AppLocalizations.of(context) ?? AppLocalizations(appProvider.locale);
+    final appLocalizations =
+        AppLocalizations.of(context) ?? AppLocalizations(appProvider.locale);
 
     return Scaffold(
       appBar: CustomAppBar(titleKey: appLocalizations.settings),
@@ -26,14 +37,21 @@ class SettingsScreen extends StatelessWidget {
           children: [
             Text(
               appLocalizations.language,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: palette.white),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: palette.white,
+              ),
             ),
             const SizedBox(height: 8),
             Card(
               color: palette.card,
               elevation: 0,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12.0,
+                  vertical: 4.0,
+                ),
                 child: Row(
                   children: [
                     Expanded(
@@ -43,20 +61,22 @@ class SettingsScreen extends StatelessWidget {
                           dropdownColor: palette.card,
                           iconEnabledColor: palette.white,
                           items: const [
-                            DropdownMenuItem(value: Locale('fr'), child: Text('Français')),
-                            DropdownMenuItem(value: Locale('en'), child: Text('English')),
+                            DropdownMenuItem(
+                              value: Locale('fr'),
+                              child: Text('Français'),
+                            ),
+                            DropdownMenuItem(
+                              value: Locale('en'),
+                              child: Text('English'),
+                            ),
                           ],
                           onChanged: (Locale? newLocale) {
-                            if (newLocale != null) appProvider.setLocale(newLocale);
+                            if (newLocale != null)
+                              appProvider.setLocale(newLocale);
                           },
                         ),
                       ),
                     ),
-                    IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: Icon(Icons.check, color: palette.accentGreen),
-                      tooltip: appLocalizations.close,
-                    )
                   ],
                 ),
               ),
@@ -64,7 +84,11 @@ class SettingsScreen extends StatelessWidget {
             const SizedBox(height: 24),
             Text(
               appLocalizations.theme,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: palette.white),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: palette.white,
+              ),
             ),
             const SizedBox(height: 8),
             Row(
@@ -91,15 +115,12 @@ class SettingsScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            SwitchListTile(
-              title: Text(isDark ? appLocalizations.dark : appLocalizations.light, style: TextStyle(color: palette.white)),
-              value: isDark,
-              onChanged: (_) => appProvider.toggleTheme(),
-              activeThumbColor: palette.accentGreen,
-            ),
             const SizedBox(height: 24),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: palette.accentGreen, foregroundColor: palette.white),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: palette.accentGreen,
+                foregroundColor: palette.white,
+              ),
               onPressed: () => Navigator.pop(context),
               child: Text(appLocalizations.close),
             ),
