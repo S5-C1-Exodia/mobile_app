@@ -44,6 +44,7 @@ class AppLocalizations {
   String get search => _isEn ? 'Search' : 'Recherche';
   String get loginSpotify => _isEn ? 'Login with Spotify' : 'Se connecter avec Spotify';
   String get loginAppleMusic => _isEn ? 'Login with Apple Music' : 'Se connecter avec Apple Music';
+  String get loadingTracks => _isEn ? 'Loading tracks...' : 'Chargement des morceaux...';
 }
 
 /// A delegate class that loads and provides [AppLocalizations] for supported locales.

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/Screens/swipe_screen.dart';
+import 'package:mobile_app/screens/login_tracks_screen.dart';
 import 'package:provider/provider.dart';
 import '../core/theme/palettes.dart';
 import '../models/playlist.dart';
@@ -76,7 +76,7 @@ class PlaylistsList extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const SwipeScreen(),
+                                builder: (context) => const LoginTracksScreen(),
                               ),
                             );
                           },
