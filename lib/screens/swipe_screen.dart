@@ -9,7 +9,11 @@ import '../core/theme/palettes.dart';
 import '../providers/app_provider.dart';
 
 class SwipeScreen extends StatefulWidget {
-  const SwipeScreen({super.key});
+  final PlaylistVM playlistVM;
+  const SwipeScreen({
+    Key? key,
+    required this.playlistVM,
+  }) : super(key: key);
 
   @override
   State<SwipeScreen> createState() => _SwipeScreenState();
@@ -27,19 +31,14 @@ class _SwipeScreenState extends State<SwipeScreen> {
     'assets/profilepictures/profile_6.jpg',
   ];
 
-  final PlaylistVM playlistVM;
-
-  _SwipeScreenState(this.playlistVM);
-
   @override
   Widget build(BuildContext context) {
     final appProvider = Provider.of<AppProvider>(context);
-    final appLocalizations = AppLocalizations.of(context) ?? AppLocalizations(appProvider.locale);
+    final appLocalizations =
+        AppLocalizations.of(context) ?? AppLocalizations(appProvider.locale);
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
-
-    // Trace pour vérifier que SwipeScreen rebuild quand la locale/theme change
-    debugPrint('SwipeScreen.build: locale=${appProvider.locale}, theme=${appProvider.themeMode}, index=$_currentIndex');
     final palette = isDark ? paletteDark : paletteLight;
+    final playlistVM = widget.playlistVM;
 
     return Scaffold(
       appBar: CustomAppBar(titleKey: 'appTitle'),
@@ -51,67 +50,35 @@ class _SwipeScreenState extends State<SwipeScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Text(
-                      appLocalizations.playlists,
-                      style: TextStyle(
-                        color: palette.white70,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 1.2,
-                      ),
+                  Text(
+                    appLocalizations.playlists,
+                    style: TextStyle(
+                      color: palette.white70,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 1.2,
                     ),
                   ),
                   const SizedBox(height: 32),
-                  SizedBox(
-                    width: 200,
-                    height: 300,
-                    child: _currentIndex < profileImages.length
-                        ? Dismissible(
-                            key: ValueKey(profileImages[_currentIndex]),
-                            direction: DismissDirection.horizontal,
-                            onDismissed: (direction) {
-                              setState(() {
-                                _currentIndex++;
-                              });
-                            },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Image.asset(
-                                profileImages[_currentIndex],
-                                width: 200,
-                                height: 300,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          )
-                        : Container(),
-                  ),
+                  _buildProfileImage(),
                   const SizedBox(height: 24),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Text(
-                      playlistVM.current.model.title,
-                      style: TextStyle(
-                        color: palette.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
+                  Text(
+                    playlistVM.current?.model.title ?? "Aucun titre",
+                    style: TextStyle(
+                      color: palette.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Text(
-                      appLocalizations.laylow,
-                      style: TextStyle(
-                        color: palette.white60,
-                        fontSize: 16,
-                      ),
-                      textAlign: TextAlign.center,
+                  Text(
+                    playlistVM.current?.model.artist ?? "Artiste inconnu",
+                    style: TextStyle(
+                      color: palette.white60,
+                      fontSize: 16,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 40),
                   ActionButtons(
@@ -125,11 +92,7 @@ class _SwipeScreenState extends State<SwipeScreen> {
             ),
             CustomBottomBar(
               currentIndex: _currentIndex,
-              onTap: (index) {
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
+              onTap: (index) => setState(() => _currentIndex = index),
             ),
           ],
         ),
@@ -137,15 +100,30 @@ class _SwipeScreenState extends State<SwipeScreen> {
     );
   }
 
-  void _handleDislike() {
-    debugPrint('Dislike!');
+  Widget _buildProfileImage() {
+    return SizedBox(
+      width: 200,
+      height: 300,
+      child: _currentIndex < profileImages.length
+          ? Dismissible(
+        key: ValueKey(profileImages[_currentIndex]),
+        direction: DismissDirection.horizontal,
+        onDismissed: (_) => setState(() => _currentIndex++),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.asset(
+            profileImages[_currentIndex],
+            width: 200,
+            height: 300,
+            fit: BoxFit.cover,
+          ),
+        ),
+      )
+          : Container(),
+    );
   }
 
-  void _handleLike() {
-    debugPrint('Like!');
-  }
-
-  void _handleFavorite() {
-    debugPrint('Favorite!');
-  }
+  void _handleDislike() => debugPrint('Dislike!');
+  void _handleLike() => debugPrint('Like!');
+  void _handleFavorite() => debugPrint('Favorite!');
 }

@@ -1,6 +1,4 @@
 import 'package:mobile_app/models/daos/interfaces/IPlaylistDAO.dart';
-import 'package:mobile_app/models/dtos/playlistDTO.dart';
-import 'package:mobile_app/models/dtos/playlistsDTO.dart';
 import 'package:mobile_app/models/playlist.dart';
 import 'package:mobile_app/models/playlists.dart';
 import 'package:mobile_app/models/track.dart';
