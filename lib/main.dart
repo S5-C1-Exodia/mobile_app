@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:mobile_app/screens/splash_screen.dart';
+import 'package:mobile_app/screens/search_screen.dart';
+import 'package:mobile_app/screens/playlist_screen.dart';
+import 'package:mobile_app/screens/profile_screen.dart';
+import 'package:mobile_app/screens/history_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_app/providers/app_provider.dart';
 import 'package:mobile_app/L10n/app_localizations.dart';
-import 'Screens/playlist_screen.dart';
 import 'core/theme/palettes.dart';
-
+import 'package:mobile_app/models/daos/fake_user_dao.dart';
+import 'package:mobile_app/models/daos/api_user_dao.dart';
+import 'package:mobile_app/viewmodels/connexion_vm.dart';
 
 void main() {
+  final userDAO = FakeUserDAO(); // or UserDAO() if the true API is to be used;
+
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => AppProvider(),
-      child: MyApp(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AppProvider()),
+        ChangeNotifierProvider(create: (_) => ConnexionVM(userDAO)),
+      ],
+      child: const MyApp(),
     ),
   );
 }
@@ -21,8 +32,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Log pour vérifier que MyApp.build est appelé quand la locale/theme change
-    debugPrint('MyApp.build: locale=${Provider.of<AppProvider>(context).locale}, theme=${Provider.of<AppProvider>(context).themeMode}');
     final appProvider = Provider.of<AppProvider>(context);
     final isDark = appProvider.themeMode == ThemeMode.dark;
     final AppPalette currentPalette = isDark ? paletteDark : paletteLight;
@@ -49,7 +58,21 @@ class MyApp extends StatelessWidget {
         Locale('en'),
       ],
       theme: themeData,
-      home: PlaylistsScreen(
+      routes: {
+        '/search': (context) => const SearchScreen(),
+        '/playlists': (context) {
+          final appProvider = Provider.of<AppProvider>(context);
+          final bool isDark = appProvider.themeMode == ThemeMode.dark;
+          final AppPalette palette = isDark ? paletteDark : paletteLight;
+          return PlaylistsScreen(
+            onToggleTheme: appProvider.toggleTheme,
+            palette: palette,
+          );
+        },
+        '/history': (context) => const HistoryScreen(),
+        '/profile': (context) => ProfileScreen(),
+      },
+      home: SplashScreen(
         palette: currentPalette,
         onToggleTheme: appProvider.toggleTheme,
       ),

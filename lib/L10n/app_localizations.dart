@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-
+/// Provides localized strings for the application based on the current [Locale].
+///
+/// This class contains all the translatable strings used in the app and
+/// returns the appropriate translation depending on the user's language.
+/// Currently supports English ('en') and French ('fr').
 class AppLocalizations {
   final Locale locale;
 
@@ -15,7 +19,7 @@ class AppLocalizations {
 
   String get appTitle => 'SwipeZ';
   String get selectPlaylist => _isEn ? 'Select a playlist' : 'Sélectionnez une playlist';
-  String get playlists => _isEn ? 'Playlists' : 'Playlists';
+  String get playlists => _isEn ? 'My playlists' : 'Mes playlists';
   String get songs => _isEn ? 'Songs' : 'Sons';
   String get history => _isEn ? 'History' : 'Historique';
   String get profile => _isEn ? 'Profile' : 'Profil';
@@ -37,19 +41,35 @@ class AppLocalizations {
   String get english => _isEn ? 'English' : 'Anglais';
   String get close => _isEn ? 'Close' : 'Fermer';
   String get settings => _isEn ? 'Settings' : 'Paramètres';
+  String get loginButton => _isEn ? 'Login' : 'Connexion';
+  String get login => _isEn ? 'Login' : 'Connexion';
+  String get logout => _isEn ? 'Logout' : 'Déconnexion';
+  String get connectToAnotherApi => _isEn ? 'Connect to another API' : 'Se connecter à une autre API';
+  String get search => _isEn ? 'Search' : 'Recherche';
+  get loginAppleMusic => _isEn ? 'Login with Apple Music' : 'Connexion avec Apple Music';
+  get loginSpotify => _isEn ? 'Login with Spotify' : 'Connexion avec Spotify';
 }
 
+/// A delegate class that loads and provides [AppLocalizations] for supported locales.
+///
+/// This delegate is used by Flutter's localization system to load the appropriate
+/// [AppLocalizations] instance based on the user's locale.
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
+  /// Returns `true` if the given [locale] is supported.
   @override
   bool isSupported(Locale locale) => ['fr', 'en'].contains(locale.languageCode);
 
+  /// Loads the [AppLocalizations] for the given [locale].
   @override
   Future<AppLocalizations> load(Locale locale) async {
     return AppLocalizations(locale);
   }
 
+  /// Determines whether the delegate should reload.
+  ///
+  /// Always returns `false` as reloading is not necessary.
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
