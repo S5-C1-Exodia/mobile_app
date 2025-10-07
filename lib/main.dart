@@ -9,13 +9,20 @@ import 'package:provider/provider.dart';
 import 'package:mobile_app/providers/app_provider.dart';
 import 'package:mobile_app/L10n/app_localizations.dart';
 import 'core/theme/palettes.dart';
-
+import 'package:mobile_app/models/daos/fake_user_dao.dart';
+import 'package:mobile_app/models/daos/api_user_dao.dart';
+import 'package:mobile_app/viewmodels/connexion_vm.dart';
 
 void main() {
+  final userDAO = FakeUserDAO(); // or UserDAO() if the true API is to be used;
+
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => AppProvider(),
-      child: MyApp(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AppProvider()),
+        ChangeNotifierProvider(create: (_) => ConnexionVM(userDAO)),
+      ],
+      child: const MyApp(),
     ),
   );
 }
@@ -25,8 +32,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Log pour vérifier que MyApp.build est appelé quand la locale/theme change
-    debugPrint('MyApp.build: locale=${Provider.of<AppProvider>(context).locale}, theme=${Provider.of<AppProvider>(context).themeMode}');
     final appProvider = Provider.of<AppProvider>(context);
     final isDark = appProvider.themeMode == ThemeMode.dark;
     final AppPalette currentPalette = isDark ? paletteDark : paletteLight;
@@ -59,12 +64,17 @@ class MyApp extends StatelessWidget {
           final appProvider = Provider.of<AppProvider>(context);
           final bool isDark = appProvider.themeMode == ThemeMode.dark;
           final AppPalette palette = isDark ? paletteDark : paletteLight;
-          return PlaylistsScreen(onToggleTheme: appProvider.toggleTheme, palette: palette);
+          return PlaylistsScreen(
+            onToggleTheme: appProvider.toggleTheme,
+            palette: palette,
+          );
         },
         '/history': (context) => const HistoryScreen(),
         '/profile': (context) => ProfileScreen(),
       },
-      home: SplashScreen(palette: currentPalette, onToggleTheme: appProvider.toggleTheme
+      home: SplashScreen(
+        palette: currentPalette,
+        onToggleTheme: appProvider.toggleTheme,
       ),
     );
   }
