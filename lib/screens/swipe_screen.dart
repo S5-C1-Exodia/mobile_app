@@ -101,6 +101,8 @@ class _SwipeScreenState extends State<SwipeScreen> {
   }
 
   Widget _buildProfileImage() {
+    final playlistVM = widget.playlistVM;
+
     return SizedBox(
       width: 200,
       height: 300,
@@ -108,7 +110,12 @@ class _SwipeScreenState extends State<SwipeScreen> {
           ? Dismissible(
         key: ValueKey(profileImages[_currentIndex]),
         direction: DismissDirection.horizontal,
-        onDismissed: (_) => setState(() => _currentIndex++),
+        onDismissed: (_) {
+          setState(() {
+            _currentIndex++;
+            playlistVM.nextTrack();
+          });
+        },
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: Image.asset(
@@ -122,6 +129,7 @@ class _SwipeScreenState extends State<SwipeScreen> {
           : Container(),
     );
   }
+
 
   void _handleDislike() => debugPrint('Dislike!');
   void _handleLike() => debugPrint('Like!');

@@ -64,7 +64,7 @@ class PlaylistsList extends StatelessWidget {
                     ),
                     trailing: Icon(Icons.chevron_right, color: currentPalette.white30),
                     onTap: () {
-                      final playlistVM = PlaylistVM(model: playlist);
+                      final playlistVM = PlaylistVM(playlist);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
