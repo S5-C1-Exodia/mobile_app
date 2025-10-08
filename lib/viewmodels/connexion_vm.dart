@@ -43,13 +43,14 @@ class ConnexionVM extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _getAuthUrl();
+      final response = await getAuthUrlMock(); //Or getAuthUrlMock() to use the mock
 
       final sessionId = response['session_id'] as String;
       final authUrl = response['url'] as String;
 
       await _userDAO.saveSession(sessionId);
       await _userDAO.urlLauncher(authUrl);
+      _isConnected = true;
 
     } catch (e) {
       _errorMessage = e.toString();
@@ -59,10 +60,12 @@ class ConnexionVM extends ChangeNotifier {
     }
   }
 
+
+
   /// Generates a mock authentication URL and session ID.
   ///
   /// Returns a map containing 'session_id' and 'url'.
-  Future<Map<String, dynamic>> _getAuthUrl() async {
+  Future<Map<String, dynamic>> getAuthUrlMock() async {
     final sessionId = 'session_${DateTime.now().millisecondsSinceEpoch}';
     final authUrl = 'https://accounts.spotify.com/authorize?client_id=xxx&response_type=code&redirect_uri=xxx&state=$sessionId';
 
