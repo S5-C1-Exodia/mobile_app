@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:mobile_app/models/daos/interfaces/IPlaylistDAO.dart';
+import 'package:mobile_app/models/daos/interfaces/i_playlist_dao.dart';
 import 'package:mobile_app/models/playlists.dart';
 import 'package:mobile_app/models/playlist.dart';
 
