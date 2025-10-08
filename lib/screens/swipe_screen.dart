@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/viewmodels/playlistVM.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,21 @@ import '../widgets/custom_app_bar.dart';
 import '../core/theme/palettes.dart';
 import '../providers/app_provider.dart';
 
+/// A screen that allows users to swipe through a series of profile images,
+/// similar to a card stack. Each card can be liked, disliked, or marked as favorite
+/// using action buttons. The screen also includes a custom app bar and bottom navigation bar.
+///
+/// The displayed card advances when the user swipes it away or presses an action button.
+/// The navigation bar allows switching between different main screens.
+///
+/// State:
+/// - [_cardIndex]: The index of the currently displayed card.
+/// - [_navIndex]: The index of the currently selected navigation item.
+///
+/// Widgets:
+/// - [CustomAppBar]: Displays the app title and controls.
+/// - [ActionButtons]: Provides Dislike, Favorite, and Like actions.
+/// - [CustomBottomBar]: Navigation bar for switching screens.
 class SwipeScreen extends StatefulWidget {
   final PlaylistVM playlistVM;
   const SwipeScreen({
@@ -19,6 +35,8 @@ class SwipeScreen extends StatefulWidget {
   State<SwipeScreen> createState() => _SwipeScreenState();
 }
 
+/// State for [SwipeScreen], manages card and navigation indices,
+/// and handles user interactions.
 class _SwipeScreenState extends State<SwipeScreen> {
   int _currentIndex = 0;
 

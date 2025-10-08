@@ -6,22 +6,21 @@ import 'login_screen.dart';
 import 'package:lottie/lottie.dart';
 import 'package:audioplayers/audioplayers.dart';
 
-
-
+/// SplashScreen is a stateful widget that displays an animated splash screen
+/// with a logo, animated text, a loading indicator, and a sound effect.
+/// After a short delay, it navigates to the login screen.
+///
+/// Parameters:
+/// - [palette]: The color palette to use for theming.
+/// - [onToggleTheme]: Callback to toggle the app theme.
 class SplashScreen extends StatefulWidget {
-  final AppPalette palette;
-  final VoidCallback onToggleTheme;
-
-  const SplashScreen({
-    Key? key,
-    required this.palette,
-    required this.onToggleTheme,
-  }) : super(key: key);
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
+/// State for [SplashScreen], manages animations, audio, and navigation.
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
@@ -58,21 +57,17 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    // Animation du texte qui se déploie
     Future.delayed(const Duration(milliseconds: 800), () {
       _animateText();
     });
 
-    // Navigation vers l'écran de connexion après l'animation
     Future.delayed(const Duration(milliseconds: 5000), () {
       if (mounted) {
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                LoginScreen(palette:  paletteDark, onToggleTheme: () {}),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
+            pageBuilder: (context, animation, secondaryAnimation) => const LoginScreen(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
               return FadeTransition(opacity: animation, child: child);
             },
             transitionDuration: const Duration(milliseconds: 500),
@@ -82,6 +77,7 @@ class _SplashScreenState extends State<SplashScreen>
     });
   }
 
+  /// Animates the logo text by revealing one character at a time.
   void _animateText() async {
     const fullText = 'SwipeZ';
     for (int i = 1; i < fullText.length; i++) {
@@ -121,17 +117,16 @@ class _SplashScreenState extends State<SplashScreen>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Logo animé
                     ShaderMask(
                       shaderCallback: (bounds) => LinearGradient(
                         colors: [
                           palette.accentGreen,
-                          palette.accentGreen.withOpacity(0.7),
+                          palette.accentGreen.withAlpha(179),
                         ],
                       ).createShader(bounds),
                       child: Text(
                         _displayedText,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 80,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -140,7 +135,6 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                     ),
                     const SizedBox(height: 20),
-                    // Indicateur de chargement
                     SizedBox(
                       width: 240,
                       height: 240,

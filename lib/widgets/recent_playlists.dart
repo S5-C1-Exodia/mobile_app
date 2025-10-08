@@ -4,9 +4,15 @@ import '../models/playlist.dart';
 import '../providers/app_provider.dart';
 import '../core/theme/palettes.dart';
 
+/// Widget that displays a vertical list of recent playlists.
+///
+/// If no playlists are provided or the list is empty, a message is shown.
+/// The style adapts to the current theme (light/dark) using [AppProvider] and [AppPalette].
+///
+/// Parameters:
+/// - [playlists]: Optional list of playlists to display. If null, a default list is used.
 class RecentPlaylists extends StatelessWidget {
   final List<Playlist>? playlists;
-
   const RecentPlaylists({super.key, this.playlists});
 
   @override
@@ -23,7 +29,10 @@ class RecentPlaylists extends StatelessWidget {
 
     if (items.isEmpty) {
       return Center(
-        child: Text('No recent playlists', style: TextStyle(color: palette.white60)),
+        child: Text(
+          'No recent playlists',
+          style: TextStyle(color: palette.white60),
+        ),
       );
     }
 
@@ -48,7 +57,13 @@ class RecentPlaylists extends StatelessWidget {
               ),
               child: Icon(Icons.queue_music, color: palette.accentGreen),
             ),
-            title: Text(p.name, style: TextStyle(color: palette.white, fontWeight: FontWeight.bold)),
+            title: Text(
+              p.name,
+              style: TextStyle(
+                color: palette.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             subtitle: Text(p.autor, style: TextStyle(color: palette.white60)),
             onTap: () {},
           ),
@@ -57,4 +72,3 @@ class RecentPlaylists extends StatelessWidget {
     );
   }
 }
-

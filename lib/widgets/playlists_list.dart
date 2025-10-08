@@ -6,6 +6,15 @@ import '../models/playlist.dart';
 import '../providers/app_provider.dart';
 import 'package:provider/provider.dart';
 
+/// A widget that displays a list of playlists in a vertical scrollable view.
+///
+/// If the list is empty, a message is shown. Each playlist is displayed as a card
+/// with its name, author, and an icon. Tapping a playlist navigates to the [SwipeScreen].
+/// The widget adapts its style to the current theme using [AppPalette].
+///
+/// Parameters:
+/// - [playlists]: The list of playlists to display.
+/// - [palette]: The color palette to use for theming.
 class PlaylistsList extends StatelessWidget {
   final List<Playlist> playlists;
   final AppPalette palette;

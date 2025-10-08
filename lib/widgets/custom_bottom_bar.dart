@@ -5,6 +5,15 @@ import '../providers/app_provider.dart';
 import '../core/theme/palettes.dart';
 import 'nav_item.dart';
 
+/// A custom bottom navigation bar widget for the application.
+///
+/// Displays four navigation items (Search, Playlists, History, Profile) and highlights
+/// the currently selected one. Handles navigation between screens using named routes.
+/// The bar adapts its colors to the current theme using [AppPalette].
+///
+/// Parameters:
+/// - [currentIndex]: The index of the currently selected navigation item.
+/// - [onTap]: Callback triggered when a navigation item is tapped.
 class CustomBottomBar extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
@@ -15,10 +24,13 @@ class CustomBottomBar extends StatelessWidget {
     required this.onTap,
   }) : super(key: key);
 
+  /// Handles tap events on navigation items and performs navigation if needed.
+  ///
+  /// Navigates to the corresponding screen using named routes if the tapped index
+  /// is different from the current one. Otherwise, calls the [onTap] callback.
   void _handleTap(BuildContext context, int index) {
     if (index == 0) {
       if (currentIndex != 0) {
-        // Navigation vers la SearchScreen via route nommée
         Navigator.pushReplacementNamed(context, '/search');
       }
     } else if (index == 1) {
