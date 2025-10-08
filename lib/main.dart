@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:mobile_app/models/daos/api_playlist_dao.dart';
 import 'package:mobile_app/screens/splash_screen.dart';
 import 'package:mobile_app/screens/search_screen.dart';
 import 'package:mobile_app/screens/playlist_screen.dart';
@@ -13,24 +14,56 @@ import 'core/theme/palettes.dart';
 import 'package:mobile_app/models/daos/fake_user_dao.dart';
 import 'package:mobile_app/models/daos/api_user_dao.dart';
 import 'package:mobile_app/viewmodels/connexion_vm.dart';
-import 'models/daos/fake_playlist_dao.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:mobile_app/models/daos/api_playlist_dao.dart';
+import 'package:mobile_app/models/daos/fake_user_dao.dart';
+import 'package:mobile_app/providers/app_provider.dart';
+import 'package:mobile_app/viewmodels/connexion_vm.dart';
+import 'package:mobile_app/viewmodels/playlistsVM.dart';
+// ou importe directement ton PlaylistsScreen si tu veux tester rapidement
 
-void main() {
-  final userDAO = FakeUserDAO(); // or UserDAO() if the true API is to be used;
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Crée et sauvegarde la session dans le même userDAO qui sera passé au DAO
+  final userDAO = FakeUserDAO();
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AppProvider()),
         ChangeNotifierProvider(create: (_) => ConnexionVM(userDAO)),
-        ChangeNotifierProvider(
-          create: (_) => PlaylistsVM(dao: FakePlaylistDAO())..loadPlaylists(),
+
+        // FutureProvider qui crée l'APIPlaylistDAO en utilisant userDAO
+        FutureProvider<APIPlaylistDAO?>(
+          create: (_) async {
+            try {
+              final dao = await APIPlaylistDAO.create(userDAO);
+              return dao;
+            } catch (e, stack) {
+              print(stack);
+              return null;
+            }
+          },
+          initialData: null,
+        ),
+
+        // Proxy qui injecte le DAO dans le VM dès qu'il est disponible
+        ChangeNotifierProxyProvider<APIPlaylistDAO?, PlaylistsVM>(
+          create: (_) => PlaylistsVM(dao: null),
+          update: (_, dao, vm) {
+            vm = vm ?? PlaylistsVM(dao: dao);
+            vm.updateDAO(dao);
+            return vm;
+          },
         ),
       ],
-      child: const MyApp(),
+      child: const MyApp(), // garde ton MyApp existant
     ),
   );
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
