@@ -1,4 +1,4 @@
-import 'package:mobile_app/models/dtos/trackDTO.dart';
+import 'package:mobile_app/models/dtos/track_dto.dart';
 
 /// **PlaylistDTO**
 ///
