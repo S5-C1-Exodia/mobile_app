@@ -5,6 +5,7 @@ import 'package:mobile_app/screens/search_screen.dart';
 import 'package:mobile_app/screens/playlist_screen.dart';
 import 'package:mobile_app/screens/profile_screen.dart';
 import 'package:mobile_app/screens/history_screen.dart';
+import 'package:mobile_app/viewmodels/playlistsVM.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_app/providers/app_provider.dart';
 import 'package:mobile_app/L10n/app_localizations.dart';
@@ -12,6 +13,7 @@ import 'core/theme/palettes.dart';
 import 'package:mobile_app/models/daos/fake_user_dao.dart';
 import 'package:mobile_app/models/daos/api_user_dao.dart';
 import 'package:mobile_app/viewmodels/connexion_vm.dart';
+import 'models/daos/fake_playlist_dao.dart';
 
 void main() {
   final userDAO = FakeUserDAO(); // or UserDAO() if the true API is to be used;
@@ -21,6 +23,9 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => AppProvider()),
         ChangeNotifierProvider(create: (_) => ConnexionVM(userDAO)),
+        ChangeNotifierProvider(
+          create: (_) => PlaylistsVM(dao: FakePlaylistDAO())..loadPlaylists(),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -33,10 +38,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appProvider = Provider.of<AppProvider>(context);
-    final isDark = appProvider.themeMode == ThemeMode.dark;
+
+    debugPrint(
+        'MyApp.build: locale=${appProvider.locale}, theme=${appProvider.themeMode}');
+
+    final bool isDark = appProvider.themeMode == ThemeMode.dark;
     final AppPalette currentPalette = isDark ? paletteDark : paletteLight;
 
-    final ThemeData themeData = (isDark ? ThemeData.dark() : ThemeData.light()).copyWith(
+    final ThemeData themeData =
+    (isDark ? ThemeData.dark() : ThemeData.light()).copyWith(
       scaffoldBackgroundColor: currentPalette.background,
       appBarTheme: AppBarTheme(
         backgroundColor: currentPalette.background,
