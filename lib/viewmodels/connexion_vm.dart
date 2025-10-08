@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import '../models/daos/api_user_dao.dart';
 import 'package:http/http.dart' as http;
+import '../models/daos/interfaces/i_user_dao.dart';
 
 /// ViewModel responsible for managing user authentication state and logic.
 ///
