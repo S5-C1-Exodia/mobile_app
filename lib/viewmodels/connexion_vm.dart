@@ -51,6 +51,8 @@ class ConnexionVM extends ChangeNotifier {
       await _userDAO.saveSession(sessionId);
       await _userDAO.urlLauncher(authUrl);
 
+      _isConnected = true;
+
     } catch (e) {
       _errorMessage = e.toString();
     } finally {

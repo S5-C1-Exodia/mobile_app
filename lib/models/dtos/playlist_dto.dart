@@ -10,7 +10,7 @@ import 'package:mobile_app/models/dtos/track_dto.dart';
 /// the information necessary for data exchange or serialization.
 class PlaylistDTO {
   /// The unique identifier of the playlist.
-  final String id;
+  final String playlistId;
 
   /// The display name of the playlist.
   final String name;
@@ -21,6 +21,8 @@ class PlaylistDTO {
   /// The URL of the playlist’s cover image.
   final String imageUrl;
 
+  final int trackCount;
+
   /// The list of tracks contained in the playlist.
   ///
   /// Each track is represented as a [TrackDTO].
@@ -28,10 +30,11 @@ class PlaylistDTO {
 
   /// Creates a new instance of [PlaylistDTO] with the given properties.
   PlaylistDTO({
-    required this.id,
+    required this.playlistId,
     required this.name,
     required this.owner,
     required this.imageUrl,
     required this.tracks,
+    required this.trackCount
   });
 }
