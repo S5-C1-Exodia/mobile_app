@@ -1,4 +1,5 @@
 import 'api_user_dao.dart';
+import 'interfaces/i_user_dao.dart';
 
 /// Fake implementation of [IUserDAO] for testing purposes.
 ///
