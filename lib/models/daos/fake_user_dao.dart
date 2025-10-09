@@ -39,4 +39,28 @@ class FakeUserDAO implements IUserDAO {
   Future<void> urlLauncher(String url) async {
     print('[FAKE] URL launched: $url');
   }
+
+  @override
+  Future<String?> getAuthUrl(String sessionId) {
+    // TODO: implement getAuthUrl
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> logout() {
+    // TODO: implement logout
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String?> startAuthSession() {
+    // TODO: implement startAuthSession
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> validateCallback(String code, String state) {
+    // TODO: implement validateCallback
+    throw UnimplementedError();
+  }
 }

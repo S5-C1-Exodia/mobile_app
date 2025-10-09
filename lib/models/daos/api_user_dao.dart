@@ -1,46 +1,100 @@
-import 'package:url_launcher/url_launcher.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'interfaces/i_user_dao.dart';
 
-/// Implementation of [IUserDAO] that manages user session in memory
-/// and provides URL launching functionality.
-class UserDAO implements IUserDAO {
-  /// Stores the current session identifier in memory.
+class ApiUserDAO implements IUserDAO {
+  static const String baseUrl = 'https://dana-impeachable-dilemmatically.ngrok-free.dev/api/spotify';
+
   String? _sessionId;
+  String? _authUrl;
 
   @override
-  /// Saves the user session identifier in memory.
   Future<void> saveSession(String sessionId) async {
     _sessionId = sessionId;
-    print('Session saved: $sessionId');
+    print('Session saved : $sessionId');
   }
 
   @override
-  /// Retrieves the current session identifier from memory.
-  ///
-  /// Returns the session identifier, or `null` if no session is stored.
-  Future<String?> getSession() async {
-    return _sessionId;
-  }
+  Future<String?> getSession() async => _sessionId;
 
   @override
-  /// Clears the stored user session identifier.
   Future<void> clearSession() async {
     _sessionId = null;
+    _authUrl = null;
   }
 
   @override
-  /// Launches the given URL in an external application.
-  ///
-  /// Throws an [Exception] if the URL cannot be opened.
-  Future<void> urlLauncher(String url) async {
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(
-        uri,
-        mode: LaunchMode.externalApplication,
-      );
-    } else {
-      throw Exception('Failed to open: $url');
+  Future<String?> startAuthSession() async {
+    const scopes = [
+      "user-read-email",
+      "playlist-read-private",
+      "user-library-read"
+    ];
+    final url = Uri.parse('$baseUrl/auth/start');
+    print('POST $url');
+
+    final res = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode({"scopes": scopes}),
+    );
+
+    print('Status: ${res.statusCode}');
+    print('Body: ${res.body}');
+
+    if (res.statusCode != 200) {
+      print('Error startAuthSession: ${res.statusCode}');
+      return null;
     }
+
+    final data = json.decode(res.body);
+    final authUrl = data['authorizationUrl'] ??
+        data['authorizationurl'] ??
+        data['AuthorizationUrl'];
+    final state = data['state'] ?? data['State'];
+
+    if (authUrl == null || state == null) {
+      print('Invalid answer: ${res.body}');
+      return null;
+    }
+
+    _authUrl = authUrl;
+    _sessionId = state;
+
+    print('Auth start OK — state: $state');
+    print('URL: $authUrl');
+
+    return state;
+  }
+
+  @override
+  Future<String?> getAuthUrl(String sessionId) async => _authUrl;
+
+  @override
+  Future<bool> validateCallback(String code, String state) async {
+    if (_sessionId == null || _sessionId != state) {
+      print('State mismatch: $_sessionId != $state');
+      return false;
+    }
+    print('Valid Callback — code=$code, state=$state');
+    return true;
+  }
+
+  @override
+  Future<void> logout() async {
+    if (_sessionId != null) {
+      try {
+        final url = Uri.parse('$baseUrl/logout');
+        await http.post(url);
+        print('Logout done');
+      } catch (e) {
+        print('Error logout: $e');
+      }
+    }
+    _sessionId = null;
+    _authUrl = null;
   }
 }
