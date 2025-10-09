@@ -13,6 +13,8 @@ import 'core/theme/palettes.dart';
 import 'package:mobile_app/models/daos/fake_user_dao.dart';
 import 'package:mobile_app/viewmodels/connexion_vm.dart';
 import 'package:mobile_app/viewmodels/playlists_vm.dart';
+
+import 'models/daos/api_user_dao.dart';
 // ou importe directement ton PlaylistsScreen si tu veux tester rapidement
 
 void main() async {

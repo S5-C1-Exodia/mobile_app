@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => PlaylistsScreen(
+          builder: (context) => PlaylistScreen(
             palette: widget.palette,
             onToggleTheme: widget.onToggleTheme,
           ),
