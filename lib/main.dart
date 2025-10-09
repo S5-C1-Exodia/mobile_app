@@ -1,58 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mobile_app/models/daos/api_playlist_dao.dart';
+import 'package:provider/provider.dart';
+
+import 'package:mobile_app/L10n/app_localizations.dart';
+import 'package:mobile_app/core/theme/palettes.dart';
+import 'package:mobile_app/providers/app_provider.dart';
+import 'package:mobile_app/viewmodels/connexion_vm.dart';
+import 'package:mobile_app/viewmodels/playlists_vm.dart';
+
 import 'package:mobile_app/screens/splash_screen.dart';
 import 'package:mobile_app/screens/search_screen.dart';
 import 'package:mobile_app/screens/playlist_screen.dart';
 import 'package:mobile_app/screens/profile_screen.dart';
 import 'package:mobile_app/screens/history_screen.dart';
-import 'package:provider/provider.dart';
-import 'package:mobile_app/providers/app_provider.dart';
-import 'package:mobile_app/L10n/app_localizations.dart';
-import 'core/theme/palettes.dart';
-import 'package:mobile_app/models/daos/fake_user_dao.dart';
-import 'package:mobile_app/viewmodels/connexion_vm.dart';
-import 'package:mobile_app/viewmodels/playlists_vm.dart';
 
+import 'models/daos/fake_playlist_dao.dart';
 import 'models/daos/api_user_dao.dart';
-// ou importe directement ton PlaylistsScreen si tu veux tester rapidement
+import 'models/daos/interfaces/i_playlist_dao.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Crée et sauvegarde la session dans le même userDAO qui sera passé au DAO
-  final userDAO = ApiUserDAO();
+  final userDAO = ApiUserDAO(); // toujours nécessaire pour ConnexionVM
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AppProvider()),
         ChangeNotifierProvider(create: (_) => ConnexionVM(userDAO)),
 
-        // FutureProvider qui crée l'APIPlaylistDAO en utilisant userDAO
-        FutureProvider<APIPlaylistDAO?>(
-          create: (_) async {
-            try {
-              final dao = await APIPlaylistDAO.create(userDAO);
-              return dao;
-            } catch (e, stack) {
-              print(stack);
-              return null;
-            }
-          },
-          initialData: null,
+        // Fournit directement le FakePlaylistDAO
+        Provider<IPlaylistDAO>(
+          create: (_) => FakePlaylistDAO(),
         ),
 
-        // Proxy qui injecte le DAO dans le VM dès qu'il est disponible
-        ChangeNotifierProxyProvider<APIPlaylistDAO?, PlaylistsVM>(
-          create: (_) => PlaylistsVM(dao: null),
-          update: (_, dao, vm) {
-            vm = vm ?? PlaylistsVM(dao: dao);
-            vm.updateDAO(dao);
+        // VM qui prend le DAO directement
+        ChangeNotifierProxyProvider<IPlaylistDAO, PlaylistsVM>(
+          create: (context) => PlaylistsVM(dao: context.read<IPlaylistDAO>()),
+          update: (context, dao, vm) {
+            vm!.updateDAO(dao);
             return vm;
           },
         ),
       ],
-      child: const MyApp(), // garde ton MyApp existant
+      child: const MyApp(),
     ),
   );
 }
@@ -62,22 +53,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Log pour vérifier que MyApp.build est appelé quand la locale/theme change
-    debugPrint(
-      'MyApp.build: locale=${Provider.of<AppProvider>(context).locale}, theme=${Provider.of<AppProvider>(context).themeMode}',
-    );
     final appProvider = Provider.of<AppProvider>(context);
     final isDark = appProvider.themeMode == ThemeMode.dark;
     final AppPalette currentPalette = isDark ? paletteDark : paletteLight;
 
     final ThemeData themeData = (isDark ? ThemeData.dark() : ThemeData.light())
         .copyWith(
-          scaffoldBackgroundColor: currentPalette.background,
-          appBarTheme: AppBarTheme(
-            backgroundColor: currentPalette.background,
-            elevation: 0,
-          ),
-        );
+      scaffoldBackgroundColor: currentPalette.background,
+      appBarTheme: AppBarTheme(
+        backgroundColor: currentPalette.background,
+        elevation: 0,
+      ),
+    );
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,

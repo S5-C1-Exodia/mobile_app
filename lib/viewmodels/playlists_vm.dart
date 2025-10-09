@@ -1,57 +1,41 @@
-// lib/viewmodels/playlists_vm.dart
 import 'package:flutter/foundation.dart';
-import 'package:mobile_app/models/daos/interfaces/i_playlist_dao.dart';
-import 'package:mobile_app/models/playlists.dart';
-import 'package:mobile_app/models/playlist.dart';
+import '../models/daos/interfaces/i_playlist_dao.dart';
+import '../models/playlists.dart';
+import '../models/playlist.dart';
 
 class PlaylistsVM extends ChangeNotifier {
-  IPlaylistDAO? dao;
+  IPlaylistDAO? _dao;
 
-  List<Playlist> _playlists = [];
-  List<Playlist> get playlists => _playlists;
+  bool isLoading = false;
+  String? errorMessage;
+  List<Playlist> playlists = [];
 
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
+  PlaylistsVM({IPlaylistDAO? dao}) {
+    _dao = dao;
+    if (_dao != null) {
+      loadPlaylists();
+    }
+  }
 
-  String? _errorMessage;
-  String? get errorMessage => _errorMessage;
-
-  PlaylistsVM({this.dao});
-
-  /// Appelé par ChangeNotifierProxyProvider quand le DAO est prêt
-  void updateDAO(IPlaylistDAO? newDao) {
-    dao = newDao;
-    print('[PlaylistsVM] DAO updated: ${dao != null}');
-    notifyListeners();
+  void updateDAO(IPlaylistDAO dao) {
+    _dao = dao;
+    loadPlaylists();
   }
 
   Future<void> loadPlaylists() async {
-    if (_isLoading) {
-      print('[PlaylistsVM] loadPlaylists skipped: already loading');
-      return;
-    }
-    if (dao == null) {
-      print('[PlaylistsVM] loadPlaylists skipped: dao == null');
-      return;
-    }
+    if (_dao == null) return;
 
-    print('[PlaylistsVM] loadPlaylists START');
-    _isLoading = true;
-    _errorMessage = null;
+    isLoading = true;
+    errorMessage = null;
     notifyListeners();
 
     try {
-      final Playlists data = await dao!.getAllPlaylists();
-      _playlists = data.playlists;
-      print('[PlaylistsVM] loaded playlists count: ${_playlists.length}');
-    } catch (e, stack) {
-      _errorMessage = "Error while loading playlists: $e";
-      if (kDebugMode) {
-        print('[PlaylistsVM] ❌ $e');
-        print(stack);
-      }
+      final all = await _dao!.getAllPlaylists();
+      playlists = all.playlists;
+    } catch (e) {
+      errorMessage = 'Erreur lors du chargement des playlists : $e';
     } finally {
-      _isLoading = false;
+      isLoading = false;
       notifyListeners();
     }
   }
