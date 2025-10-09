@@ -16,7 +16,7 @@ import 'package:mobile_app/viewmodels/connexion_vm.dart';
 import 'models/daos/fake_playlist_dao.dart';
 
 void main() {
-  final userDAO = FakeUserDAO(); // or UserDAO() if the true API is to be used;
+  final userDAO = UserDAO(); //FakeUserDAO() to test or UserDAO() if the true API is to be used;
 
   runApp(
     MultiProvider(

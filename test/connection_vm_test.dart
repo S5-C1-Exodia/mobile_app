@@ -31,7 +31,7 @@ void main() {
     });
 
     test('Erro gestion : unexisting session during handleCallback', () async {
-      await connexionVM.handleCallback('fake_code');
+      await connexionVM._handleCallback('fake_code');
       expect(connexionVM.errorMessage, isNotNull);
     });
   });
