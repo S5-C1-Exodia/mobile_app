@@ -20,8 +20,6 @@ class RecentPlaylists extends StatelessWidget {
     final appProvider = Provider.of<AppProvider>(context);
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
     final AppPalette palette = isDark ? paletteDark : paletteLight;
-
-
     final List<Playlist> items = playlists ?? [
       Playlist(id: '1', name: 'Chill Vibes', autor: 'Damso', tracks: []),
       Playlist(id: '2', name: 'Workout', autor: 'Ninho', tracks: []),

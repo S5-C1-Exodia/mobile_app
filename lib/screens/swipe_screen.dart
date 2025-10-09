@@ -1,12 +1,14 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:mobile_app/viewmodels/playlistVM.dart';
 import 'package:provider/provider.dart';
+import '../viewmodels/playlist_vm.dart';
 import '../widgets/action_buttons.dart';
 import '../widgets/custom_bottom_bar.dart';
 import '../L10n/app_localizations.dart';
 import '../widgets/custom_app_bar.dart';
 import '../core/theme/palettes.dart';
 import '../providers/app_provider.dart';
+import '../viewmodels/playlists_vm.dart';
 import 'profile_screen.dart';
 
 
@@ -50,6 +52,7 @@ class _SwipeScreenState extends State<SwipeScreen> {
     'assets/profilepictures/profile_5.jpg',
     'assets/profilepictures/profile_6.jpg',
   ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +124,6 @@ class _SwipeScreenState extends State<SwipeScreen> {
     );
   }
 
-
   Widget _buildProfileImage() {
     final playlistVM = widget.playlistVM;
 
@@ -156,4 +158,5 @@ class _SwipeScreenState extends State<SwipeScreen> {
   void _handleDislike() => debugPrint('Dislike!');
   void _handleLike() => debugPrint('Like!');
   void _handleFavorite() => debugPrint('Favorite!');
+
 }

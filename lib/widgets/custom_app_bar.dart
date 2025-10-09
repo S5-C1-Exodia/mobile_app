@@ -24,15 +24,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final appProvider = Provider.of<AppProvider>(context);
-    final appLocalizations =
-        AppLocalizations.of(context) ?? AppLocalizations(appProvider.locale);
-
-    debugPrint(
-      'CustomAppBar.build: locale=${appProvider.locale}, theme=${appProvider.themeMode}',
-    );
+    final appLocalizations = AppLocalizations.of(context) ?? AppLocalizations(appProvider.locale);
 
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
     final AppPalette currentPalette = isDark ? paletteDark : paletteLight;
+
     final Color titleColor = currentPalette.accentGreen;
 
     return AppBar(
@@ -53,61 +49,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<Locale>(
-              value: appProvider.locale,
-              dropdownColor: currentPalette.background,
-              onChanged: (Locale? newLocale) {
-                if (newLocale != null) {
-                  appProvider.setLocale(newLocale);
-                }
-              },
-              items: [
-                DropdownMenuItem(
-                  value: const Locale('fr'),
-                  child: Text(
-                    appLocalizations.french,
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge?.color,
-                    ),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: const Locale('en'),
-                  child: Text(
-                    appLocalizations.english,
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge?.color,
-                    ),
-                  ),
-                ),
-              ],
-              iconEnabledColor: Theme.of(context).iconTheme.color,
-            ),
-          ),
-        ),
-
-        Padding(
-          padding: const EdgeInsets.only(right: 12.0),
-          child: IconButton(
-            icon: Icon(
-              appProvider.themeMode == ThemeMode.dark
-                  ? Icons.nightlight_round
-                  : Icons.wb_sunny,
-            ),
-            color: currentPalette.accentGreen,
-            onPressed: () {
-              appProvider.toggleTheme();
-            },
-            tooltip: appLocalizations.theme,
-          ),
-        ),
-      ],
+      actions: [],
     );
   }
+
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);

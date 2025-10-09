@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-/// Provides localized strings for the application based on the current [Locale].
-///
-/// This class contains all the translatable strings used in the app and
-/// returns the appropriate translation depending on the user's language.
-/// Currently supports English ('en') and French ('fr').
+
 class AppLocalizations {
   final Locale locale;
 
@@ -46,8 +42,9 @@ class AppLocalizations {
   String get logout => _isEn ? 'Logout' : 'Déconnexion';
   String get connectToAnotherApi => _isEn ? 'Connect to another API' : 'Se connecter à une autre API';
   String get search => _isEn ? 'Search' : 'Recherche';
-  get loginAppleMusic => _isEn ? 'Login with Apple Music' : 'Connexion avec Apple Music';
-  get loginSpotify => _isEn ? 'Login with Spotify' : 'Connexion avec Spotify';
+  String get loginSpotify => _isEn ? 'Login with Spotify' : 'Se connecter avec Spotify';
+  String get loginAppleMusic => _isEn ? 'Login with Apple Music' : 'Se connecter avec Apple Music';
+  String get loadingTracks => _isEn ? 'Loading tracks...' : 'Chargement des morceaux...';
 }
 
 /// A delegate class that loads and provides [AppLocalizations] for supported locales.

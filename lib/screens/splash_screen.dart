@@ -13,6 +13,7 @@ import 'package:audioplayers/audioplayers.dart';
 /// Parameters:
 /// - [palette]: The color palette to use for theming.
 /// - [onToggleTheme]: Callback to toggle the app theme.
+/// State for [SplashScreen], manages animations, audio, and navigation.
 class SplashScreen extends StatefulWidget {
   final AppPalette palette;
   final VoidCallback onToggleTheme;
@@ -76,8 +77,8 @@ class _SplashScreenState extends State<SplashScreen>
                 LoginScreen(palette: paletteDark, onToggleTheme: () {}),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(opacity: animation, child: child);
-                },
+              return FadeTransition(opacity: animation, child: child);
+            },
             transitionDuration: const Duration(milliseconds: 500),
           ),
         );
@@ -129,12 +130,12 @@ class _SplashScreenState extends State<SplashScreen>
                       shaderCallback: (bounds) => LinearGradient(
                         colors: [
                           palette.accentGreen,
-                          palette.accentGreen.withOpacity(0.7),
+                          palette.accentGreen.withAlpha(179),
                         ],
                       ).createShader(bounds),
                       child: Text(
                         _displayedText,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 80,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,

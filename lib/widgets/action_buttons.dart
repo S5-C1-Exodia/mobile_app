@@ -30,36 +30,57 @@ class ActionButtons extends StatelessWidget {
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
     final AppPalette palette = isDark ? paletteDark : paletteLight;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildActionButton(
-          icon: Icons.close,
-          iconColor: palette.red,
-          size: 60,
-          borderColor: palette.white30,
-          backgroundColor: palette.card,
-          onPressed: onDislike,
-        ),
-        const SizedBox(width: 32),
-        _buildActionButton(
-          icon: Icons.star,
-          iconColor: palette.yellow,
-          size: 70,
-          borderColor: palette.white30,
-          backgroundColor: palette.card,
-          onPressed: onFavorite,
-        ),
-        const SizedBox(width: 32),
-        _buildActionButton(
-          icon: Icons.favorite,
-          iconColor: palette.accentGreen,
-          size: 60,
-          borderColor: palette.white30,
-          backgroundColor: palette.card,
-          onPressed: onLike,
-        ),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double maxWidth = constraints.maxWidth.isFinite ? constraints.maxWidth : MediaQuery.of(context).size.width;
+        double size;
+        double spacing;
+        if (maxWidth >= 500) {
+          size = 70;
+          spacing = 32;
+        } else if (maxWidth >= 360) {
+          size = 60;
+          spacing = 24;
+        } else {
+          size = 48;
+          spacing = 16;
+        }
+
+        return Center(
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: spacing,
+            runSpacing: 12,
+            children: [
+              _buildActionButton(
+                icon: Icons.close,
+                iconColor: palette.red,
+                size: size,
+                borderColor: palette.white30,
+                backgroundColor: palette.card,
+                onPressed: onDislike,
+              ),
+              _buildActionButton(
+                icon: Icons.star,
+                iconColor: palette.yellow,
+                size: size * 1.15,
+                borderColor: palette.white30,
+                backgroundColor: palette.card,
+                onPressed: onFavorite,
+              ),
+              _buildActionButton(
+                icon: Icons.favorite,
+                iconColor: palette.accentGreen,
+                size: size,
+                borderColor: palette.white30,
+                backgroundColor: palette.card,
+                onPressed: onLike,
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -93,7 +114,7 @@ class ActionButtons extends StatelessWidget {
             shape: BoxShape.circle,
             border: Border.all(color: borderColor, width: 2),
           ),
-          child: Icon(icon, color: iconColor, size: size * 0.5),
+          child: Center(child: Icon(icon, color: iconColor, size: size * 0.5)),
         ),
       ),
     );

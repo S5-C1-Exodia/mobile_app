@@ -7,9 +7,11 @@ import '../viewmodels/connexion_vm.dart';
 import 'login_screen.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_bottom_bar.dart';
+import 'settings_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,33 +39,24 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              onPressed: () async {
-                await connexionVM.disconnect();
-
-                if (connexionVM.errorMessage != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(connexionVM.errorMessage!),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
-
-                Navigator.pushReplacement(
+            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: palette.accentGreen,
+                foregroundColor: palette.white,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+              ),
+              onPressed: () {
+                Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginScreen(
-                      palette: palette,
-                      onToggleTheme: appProvider.toggleTheme,
-                    ),
-                  ),
+                  MaterialPageRoute(builder: (context) => const SettingsScreen()),
                 );
               },
-              child: Text(appLocalizations?.logout ?? 'Se déconnecter'),
+              icon: const Icon(Icons.settings),
+              label: Text(appLocalizations?.settings ?? 'Paramètres'),
             ),
+
+            const SizedBox(height: 16),
+
           ],
         ),
       ),
