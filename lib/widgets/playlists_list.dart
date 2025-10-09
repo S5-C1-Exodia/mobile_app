@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/screens/login_tracks_screen.dart';
-import 'package:provider/provider.dart';
+import 'package:mobile_app/screens/swipe_screen.dart';
+import 'package:mobile_app/viewmodels/playlist_vm.dart';
 import '../core/theme/palettes.dart';
 import '../models/playlist.dart';
 import '../providers/app_provider.dart';
+import 'package:provider/provider.dart';
 
 /// A widget that displays a list of playlists in a vertical scrollable view.
 ///
@@ -16,14 +17,19 @@ import '../providers/app_provider.dart';
 /// - [palette]: The color palette to use for theming.
 class PlaylistsList extends StatelessWidget {
   final List<Playlist> playlists;
+  final AppPalette palette;
 
-  const PlaylistsList({super.key, required this.playlists});
+  const PlaylistsList({
+    super.key,
+    required this.playlists,
+    required this.palette,
+  });
 
   @override
   Widget build(BuildContext context) {
     final appProvider = Provider.of<AppProvider>(context);
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
-    final AppPalette palette = isDark ? paletteDark : paletteLight;
+    final AppPalette currentPalette = isDark ? paletteDark : paletteLight;
 
     return Column(
       children: [
@@ -32,7 +38,7 @@ class PlaylistsList extends StatelessWidget {
               ? Center(
                   child: Text(
                     'Aucune playlist',
-                    style: TextStyle(color: palette.white70),
+                    style: TextStyle(color: currentPalette.white70),
                   ),
                 )
               : ListView.separated(
@@ -40,43 +46,45 @@ class PlaylistsList extends StatelessWidget {
                   itemCount: playlists.length,
                   separatorBuilder: (_, __) => const SizedBox(height: 8),
                   itemBuilder: (context, index) {
-                    final p = playlists[index];
+                    final playlist = playlists[index];
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: Card(
-                        color: palette.card,
+                        color: currentPalette.card,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                         child: ListTile(
                           leading: Icon(
                             Icons.queue_music,
-                            color: palette.accentGreen,
+                            color: currentPalette.accentGreen,
                           ),
                           title: Text(
-                            p.name.toUpperCase(),
+                            playlist.name.toUpperCase(),
                             style: TextStyle(
-                              color: palette.white,
+                              color: currentPalette.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 26,
                             ),
                           ),
                           subtitle: Text(
-                            p.autor,
+                            playlist.autor,
                             style: TextStyle(
-                              color: palette.white60,
+                              color: currentPalette.white60,
                               fontSize: 20,
                             ),
                           ),
                           trailing: Icon(
                             Icons.chevron_right,
-                            color: palette.white30,
+                            color: currentPalette.white30,
                           ),
                           onTap: () {
+                            final playlistVM = PlaylistVM(playlist);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const LoginTracksScreen(),
+                                builder: (context) =>
+                                    SwipeScreen(playlistVM: playlistVM),
                               ),
                             );
                           },

@@ -3,31 +3,21 @@ import 'package:provider/provider.dart';
 import '../core/theme/palettes.dart';
 import '../providers/app_provider.dart';
 import '../L10n/app_localizations.dart';
+import '../viewmodels/connexion_vm.dart';
 import 'login_screen.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_bottom_bar.dart';
 import 'settings_screen.dart';
 
-/// A stateless widget that displays the user's profile screen.
-///
-/// The screen includes:
-/// - A custom app bar with a localized title.
-/// - Two main buttons: one for connecting to another API (currently disabled),
-///   and one for logging out, which navigates to the login screen.
-/// - A custom bottom navigation bar with the profile tab selected.
-///
-/// The appearance adapts to the current theme and localization.
-///
-/// Usage:
-/// ```dart
-/// ProfileScreen()
-/// ```
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
+
 
   @override
   Widget build(BuildContext context) {
     final appProvider = Provider.of<AppProvider>(context, listen: false);
+    final connexionVM = context.watch<ConnexionVM>(); // 🔹 On récupère le ViewModel
+
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
     final AppPalette palette = isDark ? paletteDark : paletteLight;
     final appLocalizations = AppLocalizations.of(context);
@@ -35,7 +25,9 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(titleKey: appLocalizations?.profile ?? 'Profil'),
       body: Center(
-        child: Column(
+        child: connexionVM.isLoading
+            ? const CircularProgressIndicator()
+            : Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
@@ -47,7 +39,6 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                 backgroundColor: palette.accentGreen,
@@ -65,18 +56,7 @@ class ProfileScreen extends StatelessWidget {
             ),
 
             const SizedBox(height: 16),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return LoginScreen();
-                  }),
-                );
-              },
-              child: Text(appLocalizations?.logout ?? 'Se déconnecter'),
-            ),
+
           ],
         ),
       ),

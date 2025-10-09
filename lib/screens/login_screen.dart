@@ -1,21 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'package:mobile_app/L10n/app_localizations.dart';
+import '../core/theme/palettes.dart';
 import 'playlist_screen.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/login_button.dart';
+import '../viewmodels/connexion_vm.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  final AppPalette palette;
+  final VoidCallback onToggleTheme;
+
+  const LoginScreen({
+    Key? key,
+    required this.palette,
+    required this.onToggleTheme,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final appLocalizations = AppLocalizations.of(context);
+    final connexionVM = context.watch<ConnexionVM>();
 
     return Scaffold(
       appBar: CustomAppBar(titleKey: appLocalizations?.login ?? 'Connexion'),
       body: Center(
-        child: Column(
+        child: connexionVM.isLoading
+            ? const CircularProgressIndicator()
+            : Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Lottie.asset(
@@ -26,23 +39,40 @@ class LoginScreen extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             LoginButton(
-              text: appLocalizations?.loginSpotify ?? 'Connexion à Spotify',
+              text:
+              appLocalizations?.loginSpotify ?? 'Connexion à Spotify',
               color: Colors.green,
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const PlaylistsScreen(),
-                  ),
-                );
+              onPressed: () async {
+                await connexionVM.connect();
+
+                if (connexionVM.errorMessage != null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(connexionVM.errorMessage!),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
+
+                if (connexionVM.isConnected) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PlaylistScreen(
+                        palette: palette,
+                        onToggleTheme: onToggleTheme,
+                      ),
+                    ),
+                  );
+                }
               },
               imageAsset: 'assets/images/logo_spotify.png',
               enabled: true,
             ),
             const SizedBox(height: 24),
             LoginButton(
-              text:
-                  appLocalizations?.loginAppleMusic ??
+              text: appLocalizations?.loginAppleMusic ??
                   'Connexion à Apple Music',
               color: Colors.grey,
               onPressed: () {},

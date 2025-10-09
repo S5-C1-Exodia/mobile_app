@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import '../core/theme/palettes.dart';
 import '../models/playlist.dart';
 import '../providers/app_provider.dart';
+import '../viewmodels/playlists_vm.dart';
+import '../models/daos/api_playlist_dao.dart';
 import '../widgets/playlists_list.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_bottom_bar.dart';
@@ -24,40 +26,73 @@ import '../widgets/custom_bottom_bar.dart';
 /// ```dart
 /// PlaylistsScreen(onToggleTheme: ..., palette: ...)
 /// ```
-class PlaylistsScreen extends StatelessWidget {
-  const PlaylistsScreen({super.key});
+class PlaylistScreen extends StatefulWidget {
+  final VoidCallback onToggleTheme;
+  final AppPalette palette;
+
+  const PlaylistScreen({
+    super.key,
+    required this.onToggleTheme,
+    required this.palette,
+  });
+
+
+  @override
+  State<PlaylistScreen> createState() => _PlaylistsScreenState();
+}
+
+class _PlaylistsScreenState extends State<PlaylistScreen> {
+  bool _loadTriggered = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _tryLoadPlaylists();
+  }
+
+  @override
+  void didUpdateWidget(covariant PlaylistScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _tryLoadPlaylists();
+  }
+
+  void _tryLoadPlaylists() {
+    final vm = Provider.of<PlaylistsVM>(context, listen: false);
+    final dao = Provider.of<APIPlaylistDAO?>(context);
+
+    // Lancer le chargement dès que le DAO est disponible, une seule fois
+    if (!_loadTriggered && dao != null) {
+      _loadTriggered = true;
+      print('[PlaylistsScreen] DAO dispo → lancement loadPlaylists()');
+      vm.loadPlaylists();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final appProvider = Provider.of<AppProvider>(context);
-    final bool isDark = appProvider.themeMode == ThemeMode.dark;
-    final AppPalette palette = isDark ? paletteDark : paletteLight;
+    final vm = Provider.of<PlaylistsVM>(context);
+    final dao = Provider.of<APIPlaylistDAO?>(context);
 
-    final List<Playlist> samplePlaylists = [
-      Playlist(name: 'Chill Vibes', autor: 'Damso', tracks: []),
-      Playlist(name: 'Workout', autor: 'Ninho', tracks: []),
-      Playlist(name: 'Focus', autor: 'Booba', tracks: []),
-      Playlist(name: 'Hits', autor: 'Aya Nakamura', tracks: []),
-      Playlist(name: 'Classics', autor: 'Jul', tracks: []),
-      Playlist(name: 'Party', autor: 'PNL', tracks: []),
-      Playlist(name: 'Relax', autor: 'SCH', tracks: []),
-      Playlist(name: 'Road Trip', autor: 'Kaaris', tracks: []),
-      Playlist(name: 'Sleep', autor: 'Lomepal', tracks: []),
-      Playlist(name: 'Jazz', autor: 'Orelsan', tracks: []),
-      Playlist(name: 'Rock', autor: 'Soprano', tracks: []),
-      Playlist(name: 'Pop', autor: 'Vianney', tracks: []),
-    ];
+    if (dao == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    if (vm.isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    if (vm.errorMessage != null) {
+      return Scaffold(
+        body: Center(child: Text(vm.errorMessage!)),
+      );
+    }
 
     return Scaffold(
-      backgroundColor: palette.background,
+      backgroundColor: widget.palette.background,
       appBar: CustomAppBar(titleKey: 'appTitle'),
-      body: PlaylistsList(playlists: samplePlaylists),
-      bottomNavigationBar: CustomBottomBar(
-        currentIndex: 1,
-        onTap: (i) {
-          if (i == 3) {
-          }
-        },
+      body: PlaylistsList(
+        playlists: vm.playlists,
+        palette: widget.palette,
       ),
     );
 
