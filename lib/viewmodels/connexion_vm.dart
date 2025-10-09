@@ -15,8 +15,10 @@ class ConnexionVM extends ChangeNotifier {
 
   AppLinks? _appLinks;
   StreamSubscription<Uri>? _linkSub;
-
   Completer<void>? _initCompleter;
+
+  // Callback pour notifier la connexion réussie (séparation des couches)
+  void Function()? onConnectionSuccess;
 
   ConnexionVM(this._userDAO) {
     _initCompleter = Completer<void>();
@@ -33,31 +35,56 @@ class ConnexionVM extends ChangeNotifier {
       _appLinks = AppLinks();
 
       _linkSub = _appLinks!.uriLinkStream.listen((uri) async {
-        print('Deep link reçu: $uri');
+        print('🔗 Deep link reçu: $uri');
+        print('   Scheme: ${uri.scheme}, Host: ${uri.host}');
+        print('   Query params: ${uri.queryParameters}');
+        print('   État attendu: $_state');
+
         if (_isSpotifyCallback(uri)) {
-          final st = uri.queryParameters['sid'];
+          print('✅ C\'est un callback Spotify valide');
+
+          // Essayer 'state' d'abord (standard OAuth), puis 'sid'
+          final st = uri.queryParameters['state'] ?? uri.queryParameters['sid'];
+          print('   State/SID reçu: $st');
+
           if (st != null) {
-            print('Session ID extrait du callback: $st');
-            _state = st;
+            print('✅ Session ID reçu !');
+            _state = st; // Mettre à jour avec le nouveau SID
+            _isLoading = false;
             _isConnected = true;
             await _userDAO.saveSession(st);
+
+            // Appeler le callback si défini (navigation)
+            onConnectionSuccess?.call();
+
+            notifyListeners();
+          } else {
+            print('❌ Aucun Session ID reçu');
+            _isLoading = false;
+            _errorMessage = 'Aucun identifiant de session reçu';
             notifyListeners();
           }
+        } else {
+          print('❌ Pas un callback Spotify valide');
         }
       }, onError: (err) {
         print('Erreur listener deep link: $err');
         _errorMessage = err.toString();
+        _isLoading = false;
         notifyListeners();
       });
 
       final initialUri = await _appLinks!.getInitialAppLink();
       if (initialUri != null && _isSpotifyCallback(initialUri)) {
-        final st = initialUri.queryParameters['sid'];
+        final st = initialUri.queryParameters['state'] ?? initialUri.queryParameters['sid'];
         if (st != null) {
           print('Session ID du lien initial: $st');
           _state = st;
           _isConnected = true;
           await _userDAO.saveSession(st);
+
+          onConnectionSuccess?.call();
+
           notifyListeners();
         }
       }
@@ -109,13 +136,25 @@ class ConnexionVM extends ChangeNotifier {
       if (!launched) {
         throw Exception("Impossible d'ouvrir le navigateur");
       }
+
+      // Timeout de sécurité : 2 minutes max
+      Future.delayed(const Duration(minutes: 2), () {
+        if (_isLoading) {
+          print('⏱️ Timeout : pas de callback reçu');
+          _isLoading = false;
+          _errorMessage = 'Délai d\'attente dépassé. Veuillez réessayer.';
+          notifyListeners();
+        }
+      });
+
     } catch (e) {
       print('Erreur connect: $e');
       _errorMessage = e.toString();
-    } finally {
       _isLoading = false;
       notifyListeners();
     }
+    // Ne pas mettre isLoading à false ici,
+    // il sera mis à false quand le callback arrivera
   }
 
   Future<void> disconnect() async {
@@ -129,6 +168,7 @@ class ConnexionVM extends ChangeNotifier {
       await _userDAO.clearSession();
       _state = null;
       _isConnected = false;
+      _errorMessage = null;
     } catch (e) {
       _errorMessage = e.toString();
     } finally {
@@ -140,6 +180,7 @@ class ConnexionVM extends ChangeNotifier {
   @override
   void dispose() {
     _linkSub?.cancel();
+    onConnectionSuccess = null;
     super.dispose();
   }
 }

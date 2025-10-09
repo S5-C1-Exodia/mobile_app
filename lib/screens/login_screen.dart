@@ -8,7 +8,7 @@ import '../widgets/custom_app_bar.dart';
 import '../widgets/login_button.dart';
 import '../viewmodels/connexion_vm.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   final AppPalette palette;
   final VoidCallback onToggleTheme;
 
@@ -17,6 +17,60 @@ class LoginScreen extends StatelessWidget {
     required this.palette,
     required this.onToggleTheme,
   }) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Configurer le callback de navigation dans le ViewModel
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final connexionVM = context.read<ConnexionVM>();
+
+      // Le VM appellera ce callback quand la connexion réussit
+      connexionVM.onConnectionSuccess = _navigateToPlaylists;
+
+      // Écouter les erreurs
+      connexionVM.addListener(_checkForErrors);
+    });
+  }
+
+  void _navigateToPlaylists() {
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PlaylistsScreen(
+            palette: widget.palette,
+            onToggleTheme: widget.onToggleTheme,
+          ),
+        ),
+      );
+    }
+  }
+
+  void _checkForErrors() {
+    final connexionVM = context.read<ConnexionVM>();
+    if (connexionVM.errorMessage != null && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(connexionVM.errorMessage!),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    final connexionVM = context.read<ConnexionVM>();
+    connexionVM.removeListener(_checkForErrors);
+    connexionVM.onConnectionSuccess = null;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,41 +93,19 @@ class LoginScreen extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             LoginButton(
-              text:
-              appLocalizations?.loginSpotify ?? 'Connexion à Spotify',
+              text: appLocalizations?.loginSpotify ?? 'Connexion à Spotify',
               color: Colors.green,
               onPressed: () async {
-                await connexionVM.connect();
-
-                if (connexionVM.errorMessage != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(connexionVM.errorMessage!),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
-
-                if (connexionVM.isConnected) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PlaylistsScreen(
-                        palette: palette,
-                        onToggleTheme: onToggleTheme,
-                      ),
-                    ),
-                  );
-                }
+                // Simplement lancer la connexion
+                await context.read<ConnexionVM>().connect();
+                // La navigation se fera automatiquement via le listener
               },
               imageAsset: 'assets/images/logo_spotify.png',
               enabled: true,
             ),
             const SizedBox(height: 24),
             LoginButton(
-              text: appLocalizations?.loginAppleMusic ??
-                  'Connexion à Apple Music',
+              text: appLocalizations?.loginAppleMusic ?? 'Connexion à Apple Music',
               color: Colors.grey,
               onPressed: () {},
               imageAsset: 'assets/images/logo_apple.png',
