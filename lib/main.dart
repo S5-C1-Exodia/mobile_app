@@ -19,7 +19,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Crée et sauvegarde la session dans le même userDAO qui sera passé au DAO
-  final userDAO = FakeUserDAO();
+  final userDAO = ApiUserDAO();
   runApp(
     MultiProvider(
       providers: [
