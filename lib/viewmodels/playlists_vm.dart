@@ -1,4 +1,4 @@
-// lib/viewmodels/playlistsVM.dart
+// lib/viewmodels/playlists_vm.dart
 import 'package:flutter/foundation.dart';
 import 'package:mobile_app/models/daos/interfaces/i_playlist_dao.dart';
 import 'package:mobile_app/models/playlists.dart';

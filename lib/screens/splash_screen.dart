@@ -13,8 +13,16 @@ import 'package:audioplayers/audioplayers.dart';
 /// Parameters:
 /// - [palette]: The color palette to use for theming.
 /// - [onToggleTheme]: Callback to toggle the app theme.
+/// State for [SplashScreen], manages animations, audio, and navigation.
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  final AppPalette palette;
+  final VoidCallback onToggleTheme;
+
+  const SplashScreen({
+    Key? key,
+    required this.palette,
+    required this.onToggleTheme,
+  }) : super(key: key);
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -39,7 +47,6 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     _audioPlayer.play(AssetSource('sounds/openingSound.mp3'));
-
 
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
@@ -66,8 +73,10 @@ class _SplashScreenState extends State<SplashScreen>
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => const LoginScreen(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                LoginScreen(palette: paletteDark, onToggleTheme: () {}),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
               return FadeTransition(opacity: animation, child: child);
             },
             transitionDuration: const Duration(milliseconds: 500),

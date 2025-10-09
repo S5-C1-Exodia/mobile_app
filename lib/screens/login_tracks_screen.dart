@@ -1,4 +1,4 @@
-import'dart:async';
+/*import'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +27,7 @@ class _LoginTracksScreenState extends State<LoginTracksScreen> {
           _showAnimation = false;
         });
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const SwipeScreen()),
+          MaterialPageRoute(builder: (context) => const SwipeScreen(playlistVM: playlistVM)),
         );
       }
     });
@@ -77,4 +77,4 @@ class _LoginTracksScreenState extends State<LoginTracksScreen> {
       ),
     );
   }
-}
+}*/

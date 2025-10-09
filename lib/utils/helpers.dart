@@ -5,6 +5,7 @@ Future<List<Playlist>> fetchPlaylists() async {
   await Future.delayed(Duration(seconds: 1));
   return [
     Playlist(
+      id: '1',
       name: 'Top Hits',
       imageUrl: 'https://i.scdn.co/image/ab67706f00000002c4e7b6e6e6e6e6e6e6e6e6e6',
       tracks: [
@@ -13,6 +14,7 @@ Future<List<Playlist>> fetchPlaylists() async {
       ], autor: '',
     ),
     Playlist(
+      id: '2',
       name: 'Chill Vibes',
       imageUrl: 'https://i.scdn.co/image/ab67706f00000002b4e7b6e6e6e6e6e6e6e6e6e6',
       tracks: [
