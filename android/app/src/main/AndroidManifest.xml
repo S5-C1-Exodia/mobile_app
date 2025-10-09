@@ -26,6 +26,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="swipez" android:host="oauth-callback" android:path="/spotify"/>
                 <data
                     android:scheme="swipez"
                     android:host="oauth-callback"
