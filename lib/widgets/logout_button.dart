@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_app/viewmodels/connexion_vm.dart';
 import 'package:mobile_app/screens/splash_screen.dart';
+import '../L10n/app_localizations.dart';
 import '../providers/app_provider.dart';
 import '../core/theme/palettes.dart';
 
@@ -20,10 +21,11 @@ class LogoutButton extends StatelessWidget {
     final appProvider = Provider.of<AppProvider>(context, listen: false);
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
     final AppPalette palette = isDark ? paletteDark : paletteLight;
+    final appLocalizations = AppLocalizations.of(context) ?? AppLocalizations(appProvider.locale);
 
     return ElevatedButton.icon(
       icon: const Icon(Icons.logout),
-      label: const Text('Déconnexion'),
+      label:  Text(appLocalizations.logout),
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.red,
         foregroundColor: Colors.white,
