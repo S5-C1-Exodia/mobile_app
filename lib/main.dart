@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart';
-
 import 'package:mobile_app/L10n/app_localizations.dart';
 import 'package:mobile_app/core/theme/palettes.dart';
 import 'package:mobile_app/providers/app_provider.dart';
@@ -14,34 +12,42 @@ import 'package:mobile_app/screens/playlist_screen.dart';
 import 'package:mobile_app/screens/profile_screen.dart';
 import 'package:mobile_app/screens/history_screen.dart';
 
-import 'models/daos/fake_playlist_dao.dart';
-import 'models/daos/api_user_dao.dart';
-import 'models/daos/interfaces/i_playlist_dao.dart';
+import 'package:mobile_app/models/daos/api_user_dao.dart';
+import 'package:mobile_app/models/daos/api_playlist_dao.dart';
+import 'package:mobile_app/models/daos/interfaces/i_playlist_dao.dart';
 
-/// Entry point of the application.
-/// Initializes required DAOs and sets up providers for state management.
-void main() {
+import 'package:provider/provider.dart';
+
+/// Point d’entrée principal de l’application.
+///
+/// Initialise les différents DAO et configure les providers pour la gestion d’état.
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // User DAO required for ConnexionVM.
+  // DAO utilisateur (utilisé par ConnexionVM et APIPlaylistDAO)
   final userDAO = ApiUserDAO();
+
+  // On utilise ici directement l’APIPlaylistDAO
+  final playlistDAO = APIPlaylistDAO(userDAO: userDAO);
 
   runApp(
     MultiProvider(
       providers: [
-        // Provides the app-wide state (theme, locale, etc.).
+        // Provider global pour la gestion du thème et de la langue
         ChangeNotifierProvider(create: (_) => AppProvider()),
-        // Provides the connection view model.
+
+        // Provider pour la connexion utilisateur
         ChangeNotifierProvider(create: (_) => ConnexionVM(userDAO)),
-        // Provides a fake playlist DAO for testing/demo purposes.
-        Provider<IPlaylistDAO>(
-          create: (_) => FakePlaylistDAO(),
-        ),
-        // Provides the playlists view model, updating its DAO when needed.
+
+        // Fournit le DAO des playlists (API dans ce cas)
+        Provider<IPlaylistDAO>.value(value: playlistDAO),
+
+        // Fournit le ViewModel des playlists, lié au DAO
         ChangeNotifierProxyProvider<IPlaylistDAO, PlaylistsVM>(
-          create: (context) => PlaylistsVM(dao: context.read<IPlaylistDAO>()),
+          create: (context) => PlaylistsVM(dao: playlistDAO),
           update: (context, dao, vm) {
-            vm!.updateDAO(dao);
+            vm ??= PlaylistsVM(dao: dao);
+            vm.updateDAO(dao);
             return vm;
           },
         ),
@@ -51,23 +57,19 @@ void main() {
   );
 }
 
-/// Root widget of the application.
+/// Widget racine de l’application.
 ///
-/// Sets up theming, localization, and navigation routes.
+/// Configure le thème, la localisation et les routes principales.
 class MyApp extends StatelessWidget {
-  /// Creates a [MyApp] widget.
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Access the app provider for theme and locale.
     final appProvider = Provider.of<AppProvider>(context);
     final isDark = appProvider.themeMode == ThemeMode.dark;
     final AppPalette currentPalette = isDark ? paletteDark : paletteLight;
 
-    // Configure theme data based on current theme.
-    final ThemeData themeData = (isDark ? ThemeData.dark() : ThemeData.light())
-        .copyWith(
+    final ThemeData themeData = (isDark ? ThemeData.dark() : ThemeData.light()).copyWith(
       scaffoldBackgroundColor: currentPalette.background,
       appBarTheme: AppBarTheme(
         backgroundColor: currentPalette.background,

@@ -109,27 +109,25 @@ class _SwipeScreenBodyState extends State<SwipeScreenBody> {
     return SizedBox(
       width: 200,
       height: 300,
-      child: _currentIndex < profileImages.length
-          ? Dismissible(
-              key: ValueKey(profileImages[_currentIndex]),
-              direction: DismissDirection.horizontal,
-              onDismissed: (_) {
-                setState(() {
-                  _currentIndex++;
-                  playlistVM.nextTrack();
-                });
-              },
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.asset(
-                  profileImages[_currentIndex],
-                  width: 200,
-                  height: 300,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            )
-          : Container(),
+      child: Dismissible(
+        key: ValueKey(profileImages[_currentIndex]),
+        direction: DismissDirection.horizontal,
+        onDismissed: (_) {
+          setState(() {
+            _currentIndex = (_currentIndex + 1) % profileImages.length;
+            playlistVM.nextTrack();
+          });
+        },
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.asset(
+            profileImages[_currentIndex],
+            width: 200,
+            height: 300,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
     );
   }
 

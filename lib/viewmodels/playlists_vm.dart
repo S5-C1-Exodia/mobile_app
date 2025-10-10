@@ -6,8 +6,7 @@ import '../models/playlist.dart';
 ///
 /// Handles loading playlists from a data access object ([IPlaylistDAO]),
 /// manages loading and error states, and notifies listeners on changes.
-/// Use [updateDAO] to change the DAO and reload playlists.
-/// Call [loadPlaylists] to manually refresh the playlists list.
+/// Use [loadPlaylists] to manually refresh the playlists list.
 class PlaylistsVM extends ChangeNotifier {
   /// The data access object for playlists.
   IPlaylistDAO? _dao;
@@ -23,18 +22,13 @@ class PlaylistsVM extends ChangeNotifier {
 
   /// Creates a [PlaylistsVM] with an optional [dao].
   ///
-  /// If a [dao] is provided, playlists are loaded immediately.
   PlaylistsVM({IPlaylistDAO? dao}) {
     _dao = dao;
-    if (_dao != null) {
-      loadPlaylists();
-    }
   }
 
-  /// Updates the DAO and reloads playlists.
+  /// Updates the DAO reference.
   void updateDAO(IPlaylistDAO dao) {
     _dao = dao;
-    loadPlaylists();
   }
 
   /// Loads playlists asynchronously from the DAO.
