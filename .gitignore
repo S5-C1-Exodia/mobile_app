@@ -88,3 +88,8 @@ lib/generated_plugin_registrant.dart
 # Firebase/Google Services (à gérer via .env ou secrets)
 google-services.json
 GoogleService-Info.plist
+linux/flutter/ephemeral/.plugin_symlinks/app_links
+linux/flutter/ephemeral/.plugin_symlinks/audioplayers_linux
+linux/flutter/ephemeral/.plugin_symlinks/gtk
+linux/flutter/ephemeral/.plugin_symlinks/path_provider_linux
+linux/flutter/ephemeral/.plugin_symlinks/url_launcher_linux
