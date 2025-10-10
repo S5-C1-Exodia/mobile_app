@@ -1,6 +1,5 @@
 # SwipeZ Mobile Application
 
-© 2025-2026 Exodia - Tous droits réservés.
 
 ---
 
@@ -64,6 +63,34 @@ Principales dépendances utilisées :
 
 La liste complète est disponible dans le fichier `pubspec.yaml`.
 
+
 ---
 
-## Structure du projet
+## Installation & Lancement
+
+### Prérequis
+
+- [Flutter SDK](https://docs.flutter.dev/get-started/install)
+- Un IDE compatible (Android Studio, VS Code, etc.)
+
+### Installation
+
+1. Clone le dépôt :
+   ```sh
+   git clone https://github.com/S5-C1-Exodia/mobile_app.git
+   cd mobile_app
+   
+
+2. Installe les dépendances :
+   ```sh
+   flutter pub get
+   ```
+   
+3. Lance l’application :
+   ```sh
+   flutter run
+   ```
+
+
+
+© 2025-2026 Exodia - Tous droits réservés.
