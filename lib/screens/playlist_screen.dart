@@ -5,21 +5,10 @@ import '../widgets/playlists_list.dart';
 import '../widgets/custom_app_bar.dart';
 import '../core/theme/palettes.dart';
 
-/// A stateless widget that displays the playlist screen.
-///
-/// Shows a list of playlists, a custom app bar, and handles loading and error states.
-/// Allows toggling the theme via [onToggleTheme].
-class PlaylistScreen extends StatelessWidget {
-  /// Callback to toggle the app's theme.
+class PlaylistScreen extends StatefulWidget {
   final VoidCallback onToggleTheme;
-
-  /// The color palette used for theming the screen.
   final AppPalette palette;
 
-  /// Creates a [PlaylistScreen] widget.
-  ///
-  /// [onToggleTheme] The callback to toggle the theme.
-  /// [palette] The color palette to use.
   const PlaylistScreen({
     super.key,
     required this.onToggleTheme,
@@ -27,11 +16,30 @@ class PlaylistScreen extends StatelessWidget {
   });
 
   @override
+  State<PlaylistScreen> createState() => _PlaylistScreenState();
+}
+
+class _PlaylistScreenState extends State<PlaylistScreen> {
+  bool _initialized = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_initialized) {
+      Future.microtask(() {
+        final vm = context.read<PlaylistsVM>();
+        vm.loadPlaylists();
+      });
+      _initialized = true;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final vm = Provider.of<PlaylistsVM>(context);
+    final vm = context.watch<PlaylistsVM>();
 
     return Scaffold(
-      backgroundColor: palette.background,
+      backgroundColor: widget.palette.background,
       appBar: CustomAppBar(titleKey: 'appTitle'),
       body: Builder(
         builder: (_) {
@@ -43,7 +51,7 @@ class PlaylistScreen extends StatelessWidget {
           }
           return PlaylistsList(
             playlists: vm.playlists,
-            palette: palette,
+            palette: widget.palette,
           );
         },
       ),
