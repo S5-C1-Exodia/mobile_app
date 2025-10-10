@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
 import '../L10n/app_localizations.dart';
 import '../core/theme/palettes.dart';
+import 'logout_button.dart';
 
 class SettingsScreenBody extends StatelessWidget {
   const SettingsScreenBody({super.key});
@@ -109,6 +110,8 @@ class SettingsScreenBody extends StatelessWidget {
             onPressed: () => Navigator.pop(context),
             child: Text(appLocalizations.close),
           ),
+          const SizedBox(height: 16),
+          const LogoutButton(),
         ],
       ),
     );
