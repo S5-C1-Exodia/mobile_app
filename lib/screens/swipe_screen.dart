@@ -3,7 +3,6 @@ import '../viewmodels/playlist_vm.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_bottom_bar.dart';
 import '../widgets/swipe_screen_body.dart';
-import '../core/theme/palettes.dart';
 
 /// A stateful widget representing the swipe screen.
 ///
@@ -33,13 +32,9 @@ class _SwipeScreenState extends State<SwipeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Displays a custom app bar with the application title.
       appBar: CustomAppBar(titleKey: 'appTitle'),
-      // Sets the background color from the current theme.
       backgroundColor: Theme.of(context).colorScheme.background,
-      // Displays the body of the swipe screen.
       body: SwipeScreenBody(playlistVM: widget.playlistVM),
-      // Displays a custom bottom navigation bar and updates the navigation index on tap.
       bottomNavigationBar: CustomBottomBar(
         currentIndex: _navIndex,
         onTap: (index) => setState(() => _navIndex = index),

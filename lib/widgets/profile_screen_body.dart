@@ -16,25 +16,18 @@ class ProfileScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Access the app provider for theme information.
     final appProvider = Provider.of<AppProvider>(context, listen: false);
-    // Watch the connection view model for loading state.
     final connexionVM = context.watch<ConnexionVM>();
-    // Determine if the current theme is dark.
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
-    // Select the appropriate color palette.
     final AppPalette palette = isDark ? paletteDark : paletteLight;
-    // Get localized strings.
     final appLocalizations = AppLocalizations.of(context);
 
     return Center(
       child: connexionVM.isLoading
-          // Show a loading indicator if a connection is in progress.
           ? const CircularProgressIndicator()
           : Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Button to connect to another API (currently disabled).
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
@@ -46,7 +39,6 @@ class ProfileScreenBody extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                // Button to navigate to the settings screen.
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: palette.accentGreen,

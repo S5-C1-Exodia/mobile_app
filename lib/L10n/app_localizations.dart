@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// A class that provides localized strings for the application.
+/// It supports English and French languages.
 class AppLocalizations {
   final Locale locale;
 

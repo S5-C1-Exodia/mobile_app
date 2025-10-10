@@ -18,13 +18,9 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Displays a custom app bar with the 'settings' title.
       appBar: const CustomAppBar(titleKey: 'settings'),
-      // Sets the background color from the current theme.
       backgroundColor: Theme.of(context).colorScheme.background,
-      // Displays the body of the settings screen.
       body: const SettingsScreenBody(),
-      // Displays a custom bottom navigation bar, with the settings tab selected.
       bottomNavigationBar: CustomBottomBar(currentIndex: 3, onTap: (_) {}),
     );
   }

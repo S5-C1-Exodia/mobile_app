@@ -28,7 +28,6 @@ class PlaylistScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Obtains the PlaylistsVM from the provider.
     final vm = Provider.of<PlaylistsVM>(context);
 
     return Scaffold(
@@ -36,15 +35,12 @@ class PlaylistScreen extends StatelessWidget {
       appBar: CustomAppBar(titleKey: 'appTitle'),
       body: Builder(
         builder: (_) {
-          // Displays a loading indicator while playlists are loading.
           if (vm.isLoading) {
             return const Center(child: CircularProgressIndicator());
           }
-          // Displays an error message if an error occurred.
           if (vm.errorMessage != null) {
             return Center(child: Text(vm.errorMessage!));
           }
-          // Displays the list of playlists.
           return PlaylistsList(
             playlists: vm.playlists,
             palette: palette,

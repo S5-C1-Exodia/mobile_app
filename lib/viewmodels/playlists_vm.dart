@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import '../models/daos/interfaces/i_playlist_dao.dart';
-import '../models/playlists.dart';
 import '../models/playlist.dart';
 
 /// ViewModel for managing playlists state and data.

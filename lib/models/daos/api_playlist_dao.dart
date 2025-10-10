@@ -1,5 +1,3 @@
-// lib/models/daos/api_playlist_dao.dart
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/models/daos/interfaces/i_playlist_dao.dart';
@@ -50,7 +48,6 @@ class APIPlaylistDAO implements IPlaylistDAO {
     final response = await http.get(
       url,
       headers: {
-        // Passe application/json — adapte si ton backend exige text/plain
         'accept': 'application/json',
         'X-Session-Id': session_id,
         'X-Page-Token': '1',

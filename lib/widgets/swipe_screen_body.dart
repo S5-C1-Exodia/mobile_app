@@ -43,16 +43,11 @@ class _SwipeScreenBodyState extends State<SwipeScreenBody> {
 
   @override
   Widget build(BuildContext context) {
-    // Access the app provider for theme and locale information.
     final appProvider = Provider.of<AppProvider>(context);
-    // Get localized strings.
     final appLocalizations =
         AppLocalizations.of(context) ?? AppLocalizations(appProvider.locale);
-    // Determine if the current theme is dark.
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
-    // Select the appropriate color palette.
     final palette = isDark ? paletteDark : paletteLight;
-    // Access the playlist view model.
     final playlistVM = widget.playlistVM;
 
     return SafeArea(
@@ -62,7 +57,6 @@ class _SwipeScreenBodyState extends State<SwipeScreenBody> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Display the playlist title.
                 Text(
                   appLocalizations.playlists,
                   style: TextStyle(
@@ -73,10 +67,8 @@ class _SwipeScreenBodyState extends State<SwipeScreenBody> {
                   ),
                 ),
                 const SizedBox(height: 32),
-                // Display the current profile image with swipe functionality.
                 _buildProfileImage(playlistVM, palette),
                 const SizedBox(height: 24),
-                // Display the current track title.
                 Text(
                   playlistVM.current?.model.title ?? "Aucun titre",
                   style: TextStyle(
@@ -87,7 +79,6 @@ class _SwipeScreenBodyState extends State<SwipeScreenBody> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
-                // Display the current track artist.
                 Text(
                   playlistVM.current?.model.artist ?? "Artiste inconnu",
                   style: TextStyle(
@@ -97,7 +88,6 @@ class _SwipeScreenBodyState extends State<SwipeScreenBody> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 40),
-                // Action buttons for dislike, favorite, and like.
                 ActionButtons(
                   onDislike: _handleDislike,
                   onFavorite: _handleFavorite,

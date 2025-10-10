@@ -18,15 +18,11 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Retrieves the localized strings for the app.
     final appLocalizations = AppLocalizations.of(context);
 
     return Scaffold(
-      // Displays a custom app bar with the localized profile title.
       appBar: CustomAppBar(titleKey: appLocalizations?.profile ?? 'Profil'),
-      // Displays the body of the profile screen.
       body: const ProfileScreenBody(),
-      // Displays a custom bottom navigation bar, with the profile tab selected.
       bottomNavigationBar: CustomBottomBar(
         currentIndex: 3,
         onTap: (int value) {},

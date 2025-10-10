@@ -22,20 +22,15 @@ class RecentPlaylistsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Access the app provider for theme information.
     final appProvider = Provider.of<AppProvider>(context);
-    // Determine if the current theme is dark.
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
-    // Select the appropriate color palette.
     final AppPalette palette = isDark ? paletteDark : paletteLight;
-    // Use provided playlists or a default list.
     final List<Playlist> items = playlists ?? [
       Playlist(id: '1', name: 'Chill Vibes', autor: 'Damso', tracks: []),
       Playlist(id: '2', name: 'Workout', autor: 'Ninho', tracks: []),
       Playlist(id: '3', name: 'Focus', autor: 'Booba', tracks: []),
     ];
 
-    // Show a message if there are no playlists.
     if (items.isEmpty) {
       return Center(
         child: Text(
@@ -45,7 +40,6 @@ class RecentPlaylistsBody extends StatelessWidget {
       );
     }
 
-    // Display the list of recent playlists.
     return ListView.separated(
       padding: const EdgeInsets.all(12),
       itemCount: items.length,

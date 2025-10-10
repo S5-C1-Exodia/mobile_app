@@ -43,17 +43,12 @@ class _SearchScreenBodyState extends State<SearchScreenBody> {
 
   @override
   Widget build(BuildContext context) {
-    // Access the app provider for theme information.
     final appProvider = Provider.of<AppProvider>(context);
-    // Determine if the current theme is dark.
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
-    // Select the appropriate color palette.
     final AppPalette palette = isDark ? paletteDark : paletteLight;
-    // Get localized strings.
     final appLocalizations =
         AppLocalizations.of(context) ?? AppLocalizations(appProvider.locale);
 
-    // Filter the items based on the search query.
     final filtered = _allItems
         .where((e) => e.toLowerCase().contains(_query.toLowerCase()))
         .toList();
@@ -62,21 +57,18 @@ class _SearchScreenBodyState extends State<SearchScreenBody> {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          // Search bar widget for user input.
           SearchBarWidget(
             onChanged: (value) => setState(() => _query = value),
           ),
           const SizedBox(height: 20),
           Expanded(
             child: filtered.isEmpty
-                // Show a message if no results are found.
                 ? Center(
                     child: Text(
                       '${appLocalizations.search}: 0',
                       style: TextStyle(color: palette.white60),
                     ),
                   )
-                // Display the filtered list of items.
                 : ListView.separated(
                     itemCount: filtered.length,
                     separatorBuilder: (_, __) => const SizedBox(height: 8),

@@ -65,16 +65,13 @@ class ConnexionVM extends ChangeNotifier {
       _linkSub = _appLinks!.uriLinkStream.listen((uri) async {
         if (_isSpotifyCallback(uri)) {
 
-          // Try 'state' first (standard OAuth), then 'sid'
           final st = uri.queryParameters['state'] ?? uri.queryParameters['sid'];
 
           if (st != null) {
-            _state = st; // Update with new SID
+            _state = st;
             _isLoading = false;
             _isConnected = true;
             await _userDAO.saveSession(st);
-
-            // Call the callback if defined (navigation)
             onConnectionSuccess?.call();
 
             notifyListeners();
@@ -157,7 +154,6 @@ class ConnexionVM extends ChangeNotifier {
         throw Exception("Unable to open the browser");
       }
 
-      // Security timeout: max 2 minutes
       Future.delayed(const Duration(minutes: 2), () {
         if (_isLoading) {
           _isLoading = false;
@@ -171,8 +167,6 @@ class ConnexionVM extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
-    // Do not set isLoading to false here,
-    // it will be set to false when the callback arrives
   }
 
   /// Disconnects the user and clears the session.

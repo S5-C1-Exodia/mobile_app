@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../core/theme/palettes.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_bottom_bar.dart';
 import '../widgets/search_screen_body.dart';
@@ -17,13 +16,9 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Sets the background color from the current theme.
       backgroundColor: Theme.of(context).colorScheme.background,
-      // Displays a custom app bar with the 'search' title.
       appBar: const CustomAppBar(titleKey: 'search'),
-      // Displays the body of the search screen.
       body: const SearchScreenBody(),
-      // Displays a custom bottom navigation bar, with the search tab selected.
       bottomNavigationBar: CustomBottomBar(currentIndex: 0, onTap: (_) {}),
     );
   }

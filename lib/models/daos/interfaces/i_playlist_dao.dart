@@ -1,5 +1,3 @@
-import 'package:mobile_app/models/dtos/playlist_dto.dart';
-import 'package:mobile_app/models/dtos/playlists_dto.dart';
 import '../../playlist.dart';
 import '../../playlists.dart';
 
