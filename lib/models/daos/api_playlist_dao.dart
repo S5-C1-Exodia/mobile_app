@@ -14,7 +14,7 @@ class APIPlaylistDAO implements IPlaylistDAO {
   final IUserDAO userDAO;
 
   /// Base URL of the backend API.
-  final String api_link = "https://dana-impeachable-dilemmatically.ngrok-free.dev";
+  final String api_link = "https://api.entreprise-de-sousa.fr";
 
   /// Creates an instance of [APIPlaylistDAO].
   ///

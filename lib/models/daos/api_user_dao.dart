@@ -8,7 +8,7 @@ import 'interfaces/i_user_dao.dart';
 /// obtaining authorization URLs, validating callbacks, and logging out.
 class ApiUserDAO implements IUserDAO {
   /// Base URL for the Spotify API endpoints.
-  static const String baseUrl = 'https://dana-impeachable-dilemmatically.ngrok-free.dev/api/spotify';
+  static const String baseUrl = 'https://api.entreprise-de-sousa/api/spotify';
 
   /// Stores the current session identifier.
   String? _sessionId;
