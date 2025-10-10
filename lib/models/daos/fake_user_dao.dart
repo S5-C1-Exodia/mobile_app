@@ -7,6 +7,7 @@ import 'interfaces/i_user_dao.dart';
 class FakeUserDAO implements IUserDAO {
   /// Stores the current session identifier in memory.
   String? _sessionId;
+  bool shouldFail = false;
 
   @override
   /// Simulates saving the user session identifier in memory.
@@ -41,21 +42,21 @@ class FakeUserDAO implements IUserDAO {
   }
 
   @override
-  Future<String?> getAuthUrl(String sessionId) {
-    // TODO: implement getAuthUrl
-    throw UnimplementedError();
+  Future<String?> getAuthUrl(String sessionId) async {
+    if (shouldFail) throw Exception('Erreur URL');
+    return 'https://test-auth-url.com';
   }
 
   @override
-  Future<void> logout() {
-    // TODO: implement logout
-    throw UnimplementedError();
+  Future<void> logout() async {
+    if (shouldFail) throw Exception('Erreur logout');
+    _sessionId = null;
   }
 
   @override
-  Future<String?> startAuthSession() {
-    // TODO: implement startAuthSession
-    throw UnimplementedError();
+  Future<String?> startAuthSession() async {
+    if (shouldFail) throw Exception('Erreur simulée');
+    return 'session_test';
   }
 
   @override
