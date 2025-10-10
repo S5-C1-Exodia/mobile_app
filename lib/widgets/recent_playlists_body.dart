@@ -4,21 +4,38 @@ import '../models/playlist.dart';
 import '../providers/app_provider.dart';
 import '../core/theme/palettes.dart';
 
+/// Stateless widget that displays a list of recent playlists.
+///
+/// - Adapts colors to the current theme.
+/// - Shows a default list if no playlists are provided.
+/// - Displays a message if the list is empty.
+/// - Each playlist is shown with its name and author.
+/// - Handles tap events (currently no action).
 class RecentPlaylistsBody extends StatelessWidget {
+  /// The list of recent playlists to display. If null, a default list is used.
   final List<Playlist>? playlists;
+
+  /// Creates a [RecentPlaylistsBody] widget.
+  ///
+  /// [playlists] is optional. If not provided, a default list is shown.
   const RecentPlaylistsBody({super.key, this.playlists});
 
   @override
   Widget build(BuildContext context) {
+    // Access the app provider for theme information.
     final appProvider = Provider.of<AppProvider>(context);
+    // Determine if the current theme is dark.
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
+    // Select the appropriate color palette.
     final AppPalette palette = isDark ? paletteDark : paletteLight;
+    // Use provided playlists or a default list.
     final List<Playlist> items = playlists ?? [
       Playlist(id: '1', name: 'Chill Vibes', autor: 'Damso', tracks: []),
       Playlist(id: '2', name: 'Workout', autor: 'Ninho', tracks: []),
       Playlist(id: '3', name: 'Focus', autor: 'Booba', tracks: []),
     ];
 
+    // Show a message if there are no playlists.
     if (items.isEmpty) {
       return Center(
         child: Text(
@@ -28,6 +45,7 @@ class RecentPlaylistsBody extends StatelessWidget {
       );
     }
 
+    // Display the list of recent playlists.
     return ListView.separated(
       padding: const EdgeInsets.all(12),
       itemCount: items.length,

@@ -1,4 +1,5 @@
 // lib/models/daos/api_playlist_dao.dart
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/models/daos/interfaces/i_playlist_dao.dart';
@@ -7,13 +8,26 @@ import 'package:mobile_app/models/playlist.dart';
 import 'package:mobile_app/models/playlists.dart';
 import 'package:mobile_app/models/track.dart';
 
+/// Data Access Object for managing playlists via API.
+///
+/// Handles fetching playlists and playlist details from a remote API.
+/// Requires a valid user session for authentication.
 class APIPlaylistDAO implements IPlaylistDAO {
+  /// The session identifier used for API authentication.
   final String session_id;
+
+  /// The base URL of the API.
   final String api_link = "https://dana-impeachable-dilemmatically.ngrok-free.dev";
 
+  /// Private constructor for APIPlaylistDAO.
+  ///
+  /// [session_id] The session identifier for API requests.
   APIPlaylistDAO._(this.session_id);
 
-  /// Crée le DAO en utilisant l'instance IUserDAO fournie (important).
+  /// Creates an instance of APIPlaylistDAO using the provided IUserDAO.
+  ///
+  /// Throws an exception if no valid session is found.
+  /// [userDAO] The user DAO to retrieve the session from.
   static Future<APIPlaylistDAO> create(IUserDAO userDAO) async {
     final session = await userDAO.getSession();
     //final session = '7d1657ef59694f77a0f8b4bbd6464e36';
@@ -24,6 +38,10 @@ class APIPlaylistDAO implements IPlaylistDAO {
     return APIPlaylistDAO._(session);
   }
 
+  /// Fetches all playlists for the current user from the API.
+  ///
+  /// Returns a [Playlists] object containing the list of playlists.
+  /// Throws an exception if the API call fails.
   @override
   Future<Playlists> getAllPlaylists() async {
     final url = Uri.parse('$api_link/api/spotify/playlists');
@@ -66,6 +84,11 @@ class APIPlaylistDAO implements IPlaylistDAO {
     return Playlists(playlists: playlistList);
   }
 
+  /// Fetches a playlist and its tracks by playlist ID from the API.
+  ///
+  /// [id] The identifier of the playlist to fetch.
+  /// Returns a [Playlist] object with its tracks.
+  /// Throws an exception if the API call fails.
   @override
   Future<Playlist> getPlaylistById(String id) async {
     final url = Uri.parse(
@@ -124,6 +147,4 @@ class APIPlaylistDAO implements IPlaylistDAO {
       tracks: tracks,
     );
   }
-
-
 }

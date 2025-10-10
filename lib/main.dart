@@ -18,23 +18,26 @@ import 'models/daos/fake_playlist_dao.dart';
 import 'models/daos/api_user_dao.dart';
 import 'models/daos/interfaces/i_playlist_dao.dart';
 
+/// Entry point of the application.
+/// Initializes required DAOs and sets up providers for state management.
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final userDAO = ApiUserDAO(); // toujours nécessaire pour ConnexionVM
+  // User DAO required for ConnexionVM.
+  final userDAO = ApiUserDAO();
 
   runApp(
     MultiProvider(
       providers: [
+        // Provides the app-wide state (theme, locale, etc.).
         ChangeNotifierProvider(create: (_) => AppProvider()),
+        // Provides the connection view model.
         ChangeNotifierProvider(create: (_) => ConnexionVM(userDAO)),
-
-        // Fournit directement le FakePlaylistDAO
+        // Provides a fake playlist DAO for testing/demo purposes.
         Provider<IPlaylistDAO>(
           create: (_) => FakePlaylistDAO(),
         ),
-
-        // VM qui prend le DAO directement
+        // Provides the playlists view model, updating its DAO when needed.
         ChangeNotifierProxyProvider<IPlaylistDAO, PlaylistsVM>(
           create: (context) => PlaylistsVM(dao: context.read<IPlaylistDAO>()),
           update: (context, dao, vm) {
@@ -48,15 +51,21 @@ void main() {
   );
 }
 
+/// Root widget of the application.
+///
+/// Sets up theming, localization, and navigation routes.
 class MyApp extends StatelessWidget {
+  /// Creates a [MyApp] widget.
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Access the app provider for theme and locale.
     final appProvider = Provider.of<AppProvider>(context);
     final isDark = appProvider.themeMode == ThemeMode.dark;
     final AppPalette currentPalette = isDark ? paletteDark : paletteLight;
 
+    // Configure theme data based on current theme.
     final ThemeData themeData = (isDark ? ThemeData.dark() : ThemeData.light())
         .copyWith(
       scaffoldBackgroundColor: currentPalette.background,

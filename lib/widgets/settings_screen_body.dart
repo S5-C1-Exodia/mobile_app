@@ -5,14 +5,24 @@ import '../L10n/app_localizations.dart';
 import '../core/theme/palettes.dart';
 import 'logout_button.dart';
 
+/// Stateless widget representing the body of the settings screen.
+///
+/// Allows the user to change the app language and theme.
+/// Adapts colors to the current theme.
+/// Provides a button to close the settings screen.
 class SettingsScreenBody extends StatelessWidget {
+  /// Creates a [SettingsScreenBody] widget.
   const SettingsScreenBody({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Access the app provider for theme and locale information.
     final appProvider = Provider.of<AppProvider>(context);
+    // Determine if the current theme is dark.
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
+    // Select the appropriate color palette.
     final AppPalette palette = isDark ? paletteDark : paletteLight;
+    // Get localized strings.
     final appLocalizations =
         AppLocalizations.of(context) ?? AppLocalizations(appProvider.locale);
 
@@ -21,6 +31,7 @@ class SettingsScreenBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Language selection title.
           Text(
             appLocalizations.language,
             style: TextStyle(
@@ -30,6 +41,7 @@ class SettingsScreenBody extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
+          // Language selection dropdown.
           Card(
             color: palette.card,
             elevation: 0,
@@ -68,6 +80,7 @@ class SettingsScreenBody extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
+          // Theme selection title.
           Text(
             appLocalizations.theme,
             style: TextStyle(
@@ -77,6 +90,7 @@ class SettingsScreenBody extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
+          // Theme selection buttons.
           Row(
             children: [
               IconButton(
@@ -102,6 +116,7 @@ class SettingsScreenBody extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           const SizedBox(height: 24),
+          // Button to close the settings screen.
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: palette.accentGreen,

@@ -6,17 +6,32 @@ import '../L10n/app_localizations.dart';
 import '../core/theme/palettes.dart';
 import '../providers/app_provider.dart';
 
+/// Stateful widget representing the body of the swipe screen.
+///
+/// Displays the current track from a playlist, allows swiping through profile images,
+/// and provides action buttons for liking, disliking, or favoriting a track.
+/// Adapts colors to the current theme.
 class SwipeScreenBody extends StatefulWidget {
+  /// The playlist view model containing track data and navigation logic.
   final PlaylistVM playlistVM;
+
+  /// Creates a [SwipeScreenBody] widget.
+  ///
+  /// [playlistVM] is required and provides the playlist data.
   const SwipeScreenBody({Key? key, required this.playlistVM}) : super(key: key);
 
   @override
   State<SwipeScreenBody> createState() => _SwipeScreenBodyState();
 }
 
+/// State class for [SwipeScreenBody].
+///
+/// Manages the current index for profile images and handles swipe and action events.
 class _SwipeScreenBodyState extends State<SwipeScreenBody> {
+  /// The current index of the displayed profile image.
   int _currentIndex = 0;
 
+  /// List of profile image asset paths.
   final List<String> profileImages = [
     'assets/profilepictures/profile_1.jpg',
     'assets/profilepictures/profile_2.jpg',
@@ -28,11 +43,16 @@ class _SwipeScreenBodyState extends State<SwipeScreenBody> {
 
   @override
   Widget build(BuildContext context) {
+    // Access the app provider for theme and locale information.
     final appProvider = Provider.of<AppProvider>(context);
+    // Get localized strings.
     final appLocalizations =
         AppLocalizations.of(context) ?? AppLocalizations(appProvider.locale);
+    // Determine if the current theme is dark.
     final bool isDark = appProvider.themeMode == ThemeMode.dark;
+    // Select the appropriate color palette.
     final palette = isDark ? paletteDark : paletteLight;
+    // Access the playlist view model.
     final playlistVM = widget.playlistVM;
 
     return SafeArea(
@@ -42,6 +62,7 @@ class _SwipeScreenBodyState extends State<SwipeScreenBody> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Display the playlist title.
                 Text(
                   appLocalizations.playlists,
                   style: TextStyle(
@@ -52,8 +73,10 @@ class _SwipeScreenBodyState extends State<SwipeScreenBody> {
                   ),
                 ),
                 const SizedBox(height: 32),
+                // Display the current profile image with swipe functionality.
                 _buildProfileImage(playlistVM, palette),
                 const SizedBox(height: 24),
+                // Display the current track title.
                 Text(
                   playlistVM.current?.model.title ?? "Aucun titre",
                   style: TextStyle(
@@ -64,6 +87,7 @@ class _SwipeScreenBodyState extends State<SwipeScreenBody> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
+                // Display the current track artist.
                 Text(
                   playlistVM.current?.model.artist ?? "Artiste inconnu",
                   style: TextStyle(
@@ -73,6 +97,7 @@ class _SwipeScreenBodyState extends State<SwipeScreenBody> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 40),
+                // Action buttons for dislike, favorite, and like.
                 ActionButtons(
                   onDislike: _handleDislike,
                   onFavorite: _handleFavorite,
@@ -87,6 +112,9 @@ class _SwipeScreenBodyState extends State<SwipeScreenBody> {
     );
   }
 
+  /// Builds the profile image widget with swipe (dismiss) functionality.
+  ///
+  /// When swiped, advances to the next image and track in the playlist.
   Widget _buildProfileImage(PlaylistVM playlistVM, AppPalette palette) {
     return SizedBox(
       width: 200,
@@ -115,7 +143,12 @@ class _SwipeScreenBodyState extends State<SwipeScreenBody> {
     );
   }
 
+  /// Handles the dislike action.
   void _handleDislike() => debugPrint('Dislike!');
+
+  /// Handles the like action.
   void _handleLike() => debugPrint('Like!');
+
+  /// Handles the favorite action.
   void _handleFavorite() => debugPrint('Favorite!');
 }

@@ -4,71 +4,88 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:app_links/app_links.dart';
 import '../models/daos/interfaces/i_user_dao.dart';
 
+/// ViewModel for managing user connection and authentication state.
+///
+/// Handles OAuth authentication flow, deep link callbacks, and session management.
+/// Notifies listeners on state changes for UI updates.
 class ConnexionVM extends ChangeNotifier {
+  /// Data access object for user-related operations.
   final IUserDAO _userDAO;
 
+  /// Indicates if a loading operation is in progress.
   bool _isLoading = false;
+
+  /// Stores the latest error message, if any.
   String? _errorMessage;
+
+  /// Indicates if the user is currently connected.
   bool _isConnected = false;
+
+  /// Stores the current session state or ID.
   String? _state;
+
+  /// Stores the authentication URL for OAuth.
   String? _authUrl;
 
+  /// Handles app deep links.
   AppLinks? _appLinks;
+
+  /// Subscription to the deep link stream.
   StreamSubscription<Uri>? _linkSub;
+
+  /// Completer to track initialization completion.
   Completer<void>? _initCompleter;
 
-  // Callback pour notifier la connexion réussie (séparation des couches)
+  /// Callback to notify successful connection (for navigation or UI).
   void Function()? onConnectionSuccess;
 
+  /// Constructs a [ConnexionVM] with the given [IUserDAO].
   ConnexionVM(this._userDAO) {
     _initCompleter = Completer<void>();
     _initLinks();
   }
 
+  /// Returns whether a loading operation is in progress.
   bool get isLoading => _isLoading;
+
+  /// Returns the latest error message, if any.
   String? get errorMessage => _errorMessage;
+
+  /// Returns whether the user is connected.
   bool get isConnected => _isConnected;
+
+  /// Returns the current session state or ID.
   String? get state => _state;
 
+  /// Initializes deep link handling and processes initial app link.
   Future<void> _initLinks() async {
     try {
       _appLinks = AppLinks();
 
       _linkSub = _appLinks!.uriLinkStream.listen((uri) async {
-        print('🔗 Deep link reçu: $uri');
-        print('   Scheme: ${uri.scheme}, Host: ${uri.host}');
-        print('   Query params: ${uri.queryParameters}');
-        print('   État attendu: $_state');
-
         if (_isSpotifyCallback(uri)) {
-          print('✅ C\'est un callback Spotify valide');
 
-          // Essayer 'state' d'abord (standard OAuth), puis 'sid'
+          // Try 'state' first (standard OAuth), then 'sid'
           final st = uri.queryParameters['state'] ?? uri.queryParameters['sid'];
-          print('   State/SID reçu: $st');
 
           if (st != null) {
-            print('✅ Session ID reçu !');
-            _state = st; // Mettre à jour avec le nouveau SID
+            _state = st; // Update with new SID
             _isLoading = false;
             _isConnected = true;
             await _userDAO.saveSession(st);
 
-            // Appeler le callback si défini (navigation)
+            // Call the callback if defined (navigation)
             onConnectionSuccess?.call();
 
             notifyListeners();
           } else {
-            print('❌ Aucun Session ID reçu');
             _isLoading = false;
-            _errorMessage = 'Aucun identifiant de session reçu';
+            _errorMessage = 'No session ID received';
             notifyListeners();
           }
         } else {
-          print('❌ Pas un callback Spotify valide');
         }
       }, onError: (err) {
-        print('Erreur listener deep link: $err');
         _errorMessage = err.toString();
         _isLoading = false;
         notifyListeners();
@@ -78,7 +95,7 @@ class ConnexionVM extends ChangeNotifier {
       if (initialUri != null && _isSpotifyCallback(initialUri)) {
         final st = initialUri.queryParameters['state'] ?? initialUri.queryParameters['sid'];
         if (st != null) {
-          print('Session ID du lien initial: $st');
+          print('Session ID of the initial link: $st');
           _state = st;
           _isConnected = true;
           await _userDAO.saveSession(st);
@@ -97,13 +114,17 @@ class ConnexionVM extends ChangeNotifier {
     }
   }
 
+  /// Checks if the given [uri] is a valid Spotify OAuth callback.
   bool _isSpotifyCallback(Uri uri) {
     return uri.scheme == 'swipez' && uri.host == 'oauth-callback';
   }
 
+  /// Starts the OAuth connection process.
+  ///
+  /// Launches the authentication URL in an external browser and waits for a callback.
+  /// Handles errors and sets a timeout for the operation.
   Future<void> connect() async {
     if (_initCompleter != null && !_initCompleter!.isCompleted) {
-      print('Attente de la fin de l\'initialisation...');
       await _initCompleter!.future;
     }
 
@@ -114,7 +135,7 @@ class ConnexionVM extends ChangeNotifier {
     try {
       final sessionId = await _userDAO.startAuthSession();
       if (sessionId == null) {
-        throw Exception("Impossible d'obtenir la session depuis l'API");
+        throw Exception("Unable to get the session from API");
       }
 
       _state = sessionId;
@@ -122,11 +143,10 @@ class ConnexionVM extends ChangeNotifier {
 
       final authUrl = await _userDAO.getAuthUrl(sessionId);
       if (authUrl == null) {
-        throw Exception("URL d'authentification non reçue");
+        throw Exception("Authentication URL not received");
       }
 
       _authUrl = authUrl;
-      print('Lancement de l\'URL OAuth: $authUrl');
 
       final launched = await launchUrl(
         Uri.parse(authUrl),
@@ -134,29 +154,30 @@ class ConnexionVM extends ChangeNotifier {
       );
 
       if (!launched) {
-        throw Exception("Impossible d'ouvrir le navigateur");
+        throw Exception("Unable to open the browser");
       }
 
-      // Timeout de sécurité : 2 minutes max
+      // Security timeout: max 2 minutes
       Future.delayed(const Duration(minutes: 2), () {
         if (_isLoading) {
-          print('⏱️ Timeout : pas de callback reçu');
           _isLoading = false;
-          _errorMessage = 'Délai d\'attente dépassé. Veuillez réessayer.';
+          _errorMessage = 'Timeout exceeded. Please try again.';
           notifyListeners();
         }
       });
 
     } catch (e) {
-      print('Erreur connect: $e');
       _errorMessage = e.toString();
       _isLoading = false;
       notifyListeners();
     }
-    // Ne pas mettre isLoading à false ici,
-    // il sera mis à false quand le callback arrivera
+    // Do not set isLoading to false here,
+    // it will be set to false when the callback arrives
   }
 
+  /// Disconnects the user and clears the session.
+  ///
+  /// Handles logout and session cleanup, and notifies listeners.
   Future<void> disconnect() async {
     _isLoading = true;
     notifyListeners();
@@ -177,6 +198,7 @@ class ConnexionVM extends ChangeNotifier {
     }
   }
 
+  /// Disposes resources and cancels subscriptions.
   @override
   void dispose() {
     _linkSub?.cancel();
