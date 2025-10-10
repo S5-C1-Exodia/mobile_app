@@ -1,65 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../core/theme/palettes.dart';
-import '../providers/app_provider.dart';
-import '../L10n/app_localizations.dart';
-import '../viewmodels/connexion_vm.dart';
-import 'login_screen.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_bottom_bar.dart';
-import 'settings_screen.dart';
+import '../widgets/profile_screen_body.dart';
+import '../L10n/app_localizations.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
-
   @override
   Widget build(BuildContext context) {
-    final appProvider = Provider.of<AppProvider>(context, listen: false);
-    final connexionVM = context.watch<ConnexionVM>(); // 🔹 On récupère le ViewModel
-
-    final bool isDark = appProvider.themeMode == ThemeMode.dark;
-    final AppPalette palette = isDark ? paletteDark : paletteLight;
     final appLocalizations = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: CustomAppBar(titleKey: appLocalizations?.profile ?? 'Profil'),
-      body: Center(
-        child: connexionVM.isLoading
-            ? const CircularProgressIndicator()
-            : Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-              onPressed: null,
-              child: Text(
-                appLocalizations?.connectToAnotherApi ??
-                    'Se connecter à une autre API',
-              ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: palette.accentGreen,
-                foregroundColor: palette.white,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SettingsScreen()),
-                );
-              },
-              icon: const Icon(Icons.settings),
-              label: Text(appLocalizations?.settings ?? 'Paramètres'),
-            ),
-
-            const SizedBox(height: 16),
-
-          ],
-        ),
-      ),
+      body: const ProfileScreenBody(),
       bottomNavigationBar: CustomBottomBar(
         currentIndex: 3,
         onTap: (int value) {},
