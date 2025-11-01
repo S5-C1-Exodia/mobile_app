@@ -1,0 +1,23 @@
+{
+  "appTitle": "SwipeZ",
+  "selectPlaylist": "Sélectionnez une playlist",
+  "playlists": "Playlists",
+  "songs": "Sons",
+  "history": "Historique",
+  "profile": "Profil",
+  "laylow": "Laylow",
+  "dislike": "Dislike",
+  "favorite": "Favorite",
+  "like": "Like",
+  "select": "Sélectionner",
+  "tracks": "morceaux",
+  "loadingPlaylists": "Chargement des playlists...",
+  "errorLoadingPlaylists": "Erreur lors du chargement des playlists",
+  "noPlaylistsFound": "Aucune playlist trouvée",
+  "language": "Langue",
+  "theme": "Thème",
+  "light": "Clair",
+  "dark": "Sombre",
+  "french": "Français",
+  "english": "Anglais"
+}
